@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+    <h1>Dashboard</h1>
+    <h2> Your account has a balance of:  $0</h2>
+    {% with total_images_created=request.user.images_created.count %}
+        <p>Welcome {{ user.username }}.</p>
+    {% endwith %}
+    <p>You can also <a href="{% url "edit" %}">edit your profile</a> or <a href="{% url "password_change" %}">change your password</a>.</p>
+    <p>You can search for the stock of your choice <a href="{% url "stock" %}">here</a>.</p>
+    
+{% endblock %}
