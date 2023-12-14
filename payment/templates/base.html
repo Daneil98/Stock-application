@@ -1,0 +1,69 @@
+{% load static %}
+
+
+
+
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <title>{% block title %}{% endblock %}</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <link href="{% static "/css/base.css" %}" rel="stylesheet">
+        
+    </head>
+    
+    <body>
+        
+        <div id="header">
+            <a href="{% url "index" %}"><span class="logo">Stockify</span></a>
+                {% if request.user.is_authenticated %}
+                    <ul class="menu">
+                        <li {% if section == "dashboard" %}class="selected"{% endif %}>
+                            <a href="{% url "dashboard" %}">My dashboard</a>
+                        </li>
+                        <li {% if section == "stocks" %}class="selected"{% endif %}>
+                            <a href="{% url "stock" %}">Stocks</a>
+                        </li>
+                       
+                        <li {% if section == "News" %}class="selected"{% endif %}>
+                            <a href="{% url "post_list" %}">News</a>
+                        </li>
+                        <li {% if section == "About" %}class="selected"{% endif %}>
+                            <a href="{% url "about"  %}">About</a>
+                        </li>
+                        <li {% if section == "edit" %}class="selected"{% endif %}>
+                            <a href="{% url "edit" %}">My Settings</a>
+                        </li>
+                    </ul>
+                {% endif %}
+
+            
+            <span class="user">
+            {% if request.user.is_authenticated %}
+                Hello {{ request.user.username }},
+                <a href="{% url "logged_out" %}">Logout</a>
+            {% else %}
+            <a href="{% url "login" %}">Log-in</a>
+                 
+            {% endif %}
+            {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                        <li class="{{ message.tags }}">
+                        {{ message|safe }}
+                        <a href="#" class="close">x</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+            
+            </span>
+        </div>
+        <div id="content">
+            {% block content %}
+            {% endblock %}
+        </div>
+    </body>
+</html>

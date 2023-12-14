@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+    <h1>Dashboard</h1>
+    
+    <h2> Your account has a balance of: 
+        {% if total %}
+            <b><FONT COLOR = "red">${{ total }}</FONT></b>
+        {% else %}
+            <FONT COLOR = "red">$0</FONT>
+        {% endif %}
+    </h2>
+        {{ profile.photo }}
+        <p>Welcome <b>{{ user.username }}.</b></p>
+    
+    <p>You can deposit <a href="{% url 'payment:process' %}"> <b> here </b></a></p>
+
+    
+    <p>You can search for the stock of your choice <a href="{% url "stocks" %}">here</a>.</p>
+    
+{% endblock %}

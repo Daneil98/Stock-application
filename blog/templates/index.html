@@ -1,0 +1,40 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+
+
+
+    <head>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>{% block title %}{% endblock %}</title>
+        <link href="{% static "css/base.css" %}" rel="stylesheet">
+        
+    </head>
+
+
+    <body>
+
+        
+        <h1>STOCKIFY</h1>
+        
+        <nav class= "navbar navar-default navbar-static-top">
+            <div class="container">
+                <div class="col-sm-2">
+                    {% block sidebar %}
+                        <ul class="nav navar-nav">
+                            <li><a class="navbar-link" href="account">STOCKIFY</a></li>
+                            <li><a class="navbar-link" href="post">NEWS</a></li>
+                            <li><a class="navbar-link" href="/admin">ADMIN</a></li>
+                        </ul>
+                    {% endblock %}
+                </div>    
+            </div>
+        </nav>
+
+    </body>
+</html>
+
+
+
