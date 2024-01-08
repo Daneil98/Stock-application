@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}Stocks{% endblock %}
+
+{% block content %}
+    <h1> Popular stocks and their tickers </h1>
+    
+
+    <div class="container text">
+        <form action="/ticker/" method="post">
+            {% csrf_token %}
+            {{ form }}
+            <input type="submit" value="Submit">
+        </form>
+        <table class="table text-center">
+            <tr><td><b>COMPANY NAME</b>  </td><td><b>TICKER</b></td></tr>
+            <tr><td> APPLE </td><td>AAPL</td></tr>
+            <tr><td> TESLA </td><td>TSLA</td></tr>
+            <tr><td> FORD </td><td>F</td></tr>
+            <tr><td> EXXON </td><td>XOM</td></tr>
+            <tr><td> MICROSOFT </td><td>MSFT</td></tr>
+            <tr><td> BLACKROCK </td><td>BLK</td></tr>
+            <tr><td> VERIZON </td><td>VEZ</td></tr>
+            <tr><td> ENERGY TRANSFER </td><td>ET</td></tr>
+            <tr><td> ENPHASE ENERGY </td><td>ENPH</td></tr>
+            <tr><td> MCDONALDS </td><td>MCD</td></tr>
+            <tr><td> NETFLIX </td><td>NFLX</td></tr>
+            <tr><td> GOOGLE </td><td>GOOGL</td></tr>
+            <tr><td> NVIDIA </td><td>NVDA</td></tr>
+            <tr><td> WALMART </td><td>WMT</td></tr>
+            <tr><td> META PLATFORMS </td><td>META</td></tr>
+            <tr><td> AMAZON </td><td>AMZN</td></tr>
+            <tr><td> SHOPIFY </td><td>SHOP</td></tr>
+            <tr><td> TAIWAN SEMICONDUCTORS </td><td>TSM</td></tr>
+            <tr><td> UNILEVER </td><td>UL</td></tr>
+            <tr><td> COCA-COLA </td><td>KO</td></tr>
+            <tr><td> ALIBABA </td><td>BABA</td></tr>
+            <tr><td> STAG INDUSTRIAL </td><td>STAG</td></tr>
+
+        </table>
+        
+    </div>
+    
+  
+
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %} About {% endblock %}
+
+
+{% block content %}  
+
+    <h1>About Us</h1>
+    <p>Around the world, investing is a trusted and sustainable path to building long-lasting wealth.
+        But unfortunately, in Africa, investing is making the majority poorer because they are limited to local capital markets that are volatile and currency returns that are negatively-adjusted by inflation and devaluation.
+        Worst still, most Africans are not investing because they don‘t know how to invest or what to invest in.
+    </p>
+    <p>We have solved for that and built an online brokerage service that give Africans real-time access to global investment options.
+        We have spent a few years building a completely frictionless, insights-driven, and unrestricted investing experience for everyone 
+        irrespective of your geographical location, income level or financial education.
+    </p>
+    <p>Our technology provides both retail investors and institutions real-time access to the US Stock market, 
+        other global capital markets and investment products that provide real, inflation-adjusted returns.
+    </p>
+    <br>
+    <br>
+    <br>
+       
+    <form method="post">
+        {% csrf_token %}
+        {{ form }}
+        <input type ="submit" value="Submit">
+    </form>
+{% endblock %}
+

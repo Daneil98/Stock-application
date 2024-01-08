@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<table class="table text-center">
+    <tr><td> Price per share: </td> <td><b>${{ price.close }}</b></td></tr>
+    <tr><td> Shares available:  </td> <td><b>${{ total }}</b></td></tr>
+
+{% endblock %}
