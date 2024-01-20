@@ -2,8 +2,14 @@
 
 {% block content %}
 
-<table class="table text-center">
-    <tr><td> Price per share: </td> <td><b>${{ price.close }}</b></td></tr>
-    <tr><td> Shares available:  </td> <td><b>${{ total }}</b></td></tr>
-
+<form method="post">
+    
+    <table class="table text-center">
+        <h3>How many shares of <b>{{ stock }}</b> stock do you want to sell?:</h3> 
+        {% csrf_token %}
+        {{ form }}
+        <tr><td> Price per share: </td> <td><b>${{ prices }}</b></td></tr>
+        <tr><td> Number of shares:  </td> <td><b>{{ total }}</b></td></tr>
+    </table>
+    <input type="submit" value="Submit">
 {% endblock %}

@@ -68,6 +68,7 @@ INSTALLED_APPS = [
     'taggit',
     'braintree',
     'django.contrib.admin',
+    'rest_framework',
 ]
 
 

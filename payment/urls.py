@@ -12,5 +12,5 @@ urlpatterns = [
     path('done/', views.payment_done, name='done'), 
     path('canceled/', views.payment_canceled, name='canceled'),
     path('stock_buy/', views.stock_buy, name='stock_buy'),
-    #path('stock_sell/', views.stock_sell, name='stock_sell'), 
+    path('stock_sell/', views.stock_sell, name='stock_sell'), 
 ]

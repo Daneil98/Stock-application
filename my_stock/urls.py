@@ -24,8 +24,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('account/', include('account.urls')),
     path('payment/', include('payment.urls')),  
-    path('blog/', include('blog.urls')), 
     path('ticker/', views.ticker, name='ticker'),
+    path('blog/', include('blog.urls')), 
     path('', views.index, name ='index'),
     path('post_list/', views.post_list, name='post_list'),
 ]

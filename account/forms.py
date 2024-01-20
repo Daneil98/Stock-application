@@ -53,8 +53,3 @@ class TickerForm(forms.Form):
     ticker = forms.CharField(label='Ticker', max_length=10)
     
 
-
-class price_dbForm(forms.ModelForm):
-    class Meta:
-        model = price_db
-        fields = ['price',]

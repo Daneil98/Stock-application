@@ -17,15 +17,15 @@ class DepositForm(forms.ModelForm):
         fields = ('amount', 'description')
 
 class BuyForm(forms.ModelForm):
-    total_purchase_amount = forms.DecimalField(max_digits=10, decimal_places=2)
+    total_price = forms.DecimalField(max_digits=10, decimal_places=2)
     
     class Meta:
         model = amount
-        fields = ('total_purchase_amount',)      
+        fields = ('total_price',)      
         
 class SellForm(forms.ModelForm):
-    selling_amount = forms.DecimalField(max_digits=10, decimal_places=2, label='How much do you want to sell?')
+    shares = forms.DecimalField(max_digits=10, decimal_places=2, label='How many shares do you want to sell?')
     
     class Meta:
-        model = Sell
-        fields = ('total_selling_amount',)     
+        model = amount
+        fields = ('shares',)     

@@ -1,6 +1,3 @@
-import braintree
-import json
-
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Sum
 from django.http import JsonResponse
@@ -10,8 +7,8 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from .models import Profile, price_db
-from payment.models import Payment, Buy
-from .forms import LoginForm, UserRegistrationForm, UserEditForm, ProfileEditForm, TickerForm, FAQForm, price_dbForm
+
+from .forms import LoginForm, UserRegistrationForm, UserEditForm, ProfileEditForm, TickerForm, FAQForm
 from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.utils.safestring import mark_safe
@@ -19,6 +16,8 @@ from .tiingo import get_meta_data, get_price
 from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models import Count
 from django.urls import reverse
+
+from payment.models import Wallet, Payment
 from blog.views import post_list
 from blog.models import Post
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -26,7 +25,7 @@ from taggit.models import Tag
 from my_stock import settings 
 from django.utils.decorators import method_decorator
 from django.views import generic
-from .transaction import Transaction
+
 import json
 # Create your views here.
 
@@ -66,11 +65,11 @@ def user_login(request):
 @login_required
 def dashboard(request):
     total = Payment.objects.filter(paid=True).aggregate(Sum('amount'))['amount__sum']
-    latest_buy = Buy.objects.order_by('-id').first()
+    recent = Wallet.objects.order_by('-id').first()
 
-    if latest_buy:
-        equity = latest_buy.total_purchase_price
-        balance = latest_buy.balance
+    if recent:
+        equity = recent.stock_eq
+        balance = recent.balance
     else:
         equity = 0
         balance = 0
@@ -131,16 +130,16 @@ def stock(request):
         form = TickerForm()
     return render(request, 'account/stock.html', {'form': form})
 
+
 @login_required
 @csrf_exempt
 def ticker(request, **ticker):  
     ticker = request.POST['ticker']
-    
     stock_instance = price_db()                     #Create a stock instance for the price_db model
     prize = {'type': get_price(ticker)}
-    price = (prize["type"])
-    close_price = price['close']                    # Extract the "close" value
-    open_price = price['open']
+    price = (prize["type"])                         #Sets price as a dictionary with prize and type as key-value pair
+    close_price = price['close']                    # Extracts the "close" value
+    open_price = price['open']                      # Extracts the "open" value
     
     name = {'typ': get_meta_data(ticker)}
     meta = (name['typ'])

@@ -25,5 +25,5 @@ class Profile(models.Model):
 
 class price_db(models.Model):
     name = models.CharField(max_length=10, null=True) 
-    closeprice = models.CharField(max_length=10, null=True)    
+    closeprice = models.CharField(max_length=10, null=True)   
     openprice = models.CharField(max_length=10, null=True)  

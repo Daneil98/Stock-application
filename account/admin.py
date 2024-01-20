@@ -11,4 +11,4 @@ class ProfileAdmin(admin.ModelAdmin):
 
 @admin.register(price_db)
 class price_dbAdmin(admin.ModelAdmin):
-    list_display = ['name', 'price']
+    list_display = ['name', 'closeprice', 'openprice']
