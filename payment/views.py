@@ -7,10 +7,9 @@ from .forms import DepositForm, BuyForm, SellForm
 from .models import Payment, Buy, Sell, amount, Wallet
 from account.models import price_db
 from django.urls import reverse
-from django.http import HttpResponse, HttpResponseRedirect
-from account.transaction import BuyTransaction, SellTransaction, WalletTransaction
+from payment.transaction import BuyTransaction, SellTransaction, WalletTransaction
 from account.tiingo import get_meta_data, get_price
-
+    
 # Create your views here.
 
 gateway = braintree.BraintreeGateway(settings.BRAINTREE_CONF)
@@ -22,7 +21,6 @@ def payment_process(request):
     total_cost = Payment_instance.amount
     profile = request.user
     name = profile.username
-    
     if request.method == 'POST':
         # retrieve nonce
         nonce = request.POST.get('payment_method_nonce', None)
@@ -87,8 +85,10 @@ def stock_buy(request, **ticker):
     profile = request.user
     name = profile.username
     
-    total = Wallet.objects.aggregate(Sum('balance'))['balance__sum']           #Total amount of money in the wallet
-    amount1 = float(total)              #Declares total amount of money in the wallet as a float data type 
+    balance = Wallet.objects.order_by('-id').first()       #Balance left in the account
+    amount1 = wallet_balance = float(balance.balance)      #Assigns the wallet balance as a float data type 
+    amount3 = wallet_eq_balance = float(balance.stock_eq)    
+    
     amount2 = float(prices)             #Current price of the stock to be purchased
     
     if request.method == "POST":
@@ -98,6 +98,8 @@ def stock_buy(request, **ticker):
         price = total_amount.total_price
         sum_price = float(price)
         
+        
+        WalletTransaction_instance = WalletTransaction(amount1, amount3)
         Transaction_instance = BuyTransaction(amount1)                     #Creates a transaction instance for the transaction class witn amount1 as the self.balance
         shares_bought = Transaction_instance.share_number(sum_price, amount2)
         if Transaction_instance.charge(amount2, shares_bought):
@@ -113,7 +115,7 @@ def stock_buy(request, **ticker):
             
             Wallet_instance.user = name
             Wallet_instance.stock_eq = sum_price
-            Wallet_instance.balance = Transaction_instance.get_balance()
+            Wallet_instance.balance = WalletTransaction_instance.buy_balance_update(sum_price)
             Wallet_instance.save() 
             return redirect('payment:done')
         else:
@@ -130,10 +132,9 @@ def stock_sell(request, **ticker):
     stock_price = float(data.openprice)                             #Srips and assings the open price value from price_db as a float data type
     stock_name = str(data.name)                                     #Strips and assigns the name value as a string data type
     
-    #BASIC DATA FROM THE BUY MODEL DB
+    #STOCK DATA FROM THE BUY MODEL DB
     data1 = Buy.objects.order_by('-id').first()
     stock_name1 = str(data1.name)
-    shares_avail = float(data1.shares)
     
     #GETS THE USER'S NAME
     profile = request.user
@@ -141,42 +142,38 @@ def stock_sell(request, **ticker):
     
     #BASIC DATA FROM THE WALLET MODEL DB
     balance = Wallet.objects.order_by('-id').first()       #Balance left in the account
-    wallet_balance = float(balance.balance)
-    wallet_eq_balance = float(balance.stock_eq)
-    amount1 = wallet_balance              #Assigns the wallet balance as a float data type 
-    amount2 = float(stock_price)          #Current price of the stock to be sold
-    amount3 = wallet_eq_balance
-    
+    amount1 = wallet_balance = float(balance.balance)      #Assigns the wallet balance as a float data type 
+    amount3 = wallet_eq_balance = float(balance.stock_eq)            
+    shares_avail = float(data1.shares)
     
     if stock_name == stock_name1:  
         if request.method == "POST":
             if form.is_valid():
                 form.save()
+            else:
+                raise ValueError
             data2 = amount.objects.order_by('-id').first()
-            shares = float(data2.shares)
+            amount2 = float(data2.total_price)
             Transaction_instance = SellTransaction(amount1)                     #Creates a transaction instance for the transaction class witn amount1 as a data input
-            total_selling_amount = shares * stock_price
             
             WalletTransaction_instance = WalletTransaction(wallet_balance, wallet_eq_balance)
-            
-            if Transaction_instance.sell(shares, shares_avail):
+            shares_sold = Transaction_instance.share_number(amount2, stock_price)
+            if Transaction_instance.sell(amount2, amount3):
                 Sell_instance = Sell()
                 Wallet_instance = Wallet()
                 Sell_instance.user = name
                 Sell_instance.name = stock_name
                 Sell_instance.sold = True
-                Sell_instance.total_selling_amount = total_selling_amount
+                Sell_instance.total_selling_amount = amount2
                 Sell_instance.stock_selling_price = stock_price
-                Sell_instance.shares = shares
+                Sell_instance.shares = shares_sold
                 Sell_instance.save()
                 
                 Wallet_instance.user = name
-                Wallet_instance.stock_eq = WalletTransaction_instance.stock_eq_update(total_selling_amount)
-                Wallet_instance.balance = WalletTransaction_instance.balance_update(total_selling_amount) 
+                Wallet_instance.stock_eq = WalletTransaction_instance.stock_eq_update(amount2)
+                Wallet_instance.balance = WalletTransaction_instance.sell_balance_update(amount2) 
                 Wallet_instance.save()
                 return redirect('payment:done')
-    else:
-        return redirect('account:ticker')
+            else:
+                return redirect('payment:canceled')
     return render(request, 'stock_sell.html', {'Sell': Sell, 'form': form, 'total': shares_avail, 'prices': stock_price, 'stock': stock_name })
-            
-            

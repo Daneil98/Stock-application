@@ -13,10 +13,10 @@
         {% endif %}
     </h2>
     <h2> Stock equities:
-        {% if equity %}
+        {% if equity > -1 %}
             <b><FONT COLOR = "GREEN">${{ equity }}</FONT></b>
         {% else %}
-            <FONT COLOR = "red">$0</FONT>
+            <FONT COLOR = "red"> ${{ equity }} </FONT>
         {% endif %}
     </h2>
     <h2> Stock account balance:

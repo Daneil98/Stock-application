@@ -6,7 +6,6 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 from django.shortcuts import render
 
-from payment.models import Payment
 # Create your models here.
 
 

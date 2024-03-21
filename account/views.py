@@ -1,6 +1,6 @@
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Sum
-from django.http import JsonResponse
+
 from . import forms
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
@@ -10,19 +10,12 @@ from .models import Profile, price_db
 
 from .forms import LoginForm, UserRegistrationForm, UserEditForm, ProfileEditForm, TickerForm, FAQForm
 from django.contrib import messages
-from django.shortcuts import render, redirect
-from django.utils.safestring import mark_safe
+from django.shortcuts import render
 from .tiingo import get_meta_data, get_price
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render
 from django.db.models import Count
-from django.urls import reverse
-
 from payment.models import Wallet, Payment
-from blog.views import post_list
-from blog.models import Post
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from taggit.models import Tag
-from my_stock import settings 
 from django.utils.decorators import method_decorator
 from django.views import generic
 
@@ -64,7 +57,7 @@ def user_login(request):
 
 @login_required
 def dashboard(request):
-    total = Payment.objects.filter(paid=True).aggregate(Sum('amount'))['amount__sum']
+    total = float(Payment.objects.filter(paid=True).aggregate(Sum('amount'))['amount__sum'])
     recent = Wallet.objects.order_by('-id').first()
 
     if recent:
