@@ -1,0 +1,6 @@
+Django framework
+Python 3
+Django rest-framework
+Django Taggit
+Braintree Sandbox Account
+Braintree
