@@ -1,25 +1,17 @@
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Sum
-
-from . import forms
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from .models import Profile, price_db
-
 from .forms import LoginForm, UserRegistrationForm, UserEditForm, ProfileEditForm, TickerForm, FAQForm
 from django.contrib import messages
 from django.shortcuts import render
 from .tiingo import get_meta_data, get_price
 from django.shortcuts import render
-from django.db.models import Count
-from payment.models import Wallet, Payment
-from taggit.models import Tag
-from django.utils.decorators import method_decorator
-from django.views import generic
+from payment.models import Wallet, Payment, Stock_Wallet
 
-import json
 # Create your views here.
 
 #BASIC VIEWS
@@ -59,7 +51,7 @@ def user_login(request):
 def dashboard(request):
     total = float(Payment.objects.filter(paid=True).aggregate(Sum('amount'))['amount__sum'])
     recent = Wallet.objects.order_by('-id').first()
-
+    
     if recent:
         equity = recent.stock_eq
         balance = recent.balance
@@ -68,6 +60,20 @@ def dashboard(request):
         balance = 0
     
     return render(request, 'account/dashboard.html', {'section': 'dashboard', 'total': total, 'equity': equity, 'balance': balance})
+
+def my_stocks(request):
+    stocks_owned = Stock_Wallet.objects.order_by('-id').first()
+    if stocks_owned:
+        stock_name = stocks_owned.name
+        equity = stocks_owned.equity
+        shares = stocks_owned.shares
+    else:
+        equity = ''
+        shares = ''
+        stock_name = ''
+    
+    return render(request, 'account/my_stocks.html', {'section': 'my_stocks', 'stock_name': stock_name, 'equity': equity, 'shares': shares})
+
 
 def register(request):
     user_form = UserRegistrationForm(request.POST)

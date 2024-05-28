@@ -45,7 +45,7 @@ BRAINTREE_CONF = braintree.Configuration(
 
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-^veog2+==d!62p_ko-__y1cm*c$^le!3#_xe8y&_jty+e-*kxp'
+SECRET_KEY = 'bd&p_i@jaq&@7kt7)dd)j!3vdr4z)ij&n1z409j*69i&!ll3$v'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True

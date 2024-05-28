@@ -23,6 +23,9 @@
                         <li {% if section == "dashboard" %}class="selected"{% endif %}>
                             <a href="{% url "dashboard" %}">My dashboard</a>
                         </li>
+                        <li {% if section == "my_stocks" %}class="selected"{% endif %}>
+                            <a href="{% url "my_stocks" %}">My Stocks</a>
+                        </li>
                         <li {% if section == "stocks" %}class="selected"{% endif %}>
                             <a href="{% url "stocks" %}">Stocks</a>
                         </li>

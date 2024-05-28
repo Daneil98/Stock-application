@@ -4,10 +4,10 @@ from django.db.models import Sum
 from django.shortcuts import render, redirect, get_object_or_404
 from django.conf import settings
 from .forms import DepositForm, BuyForm, SellForm
-from .models import Payment, Buy, Sell, amount, Wallet
+from .models import Payment, Buy, Sell, amount, Wallet, Stock_Wallet
 from account.models import price_db
 from django.urls import reverse
-from payment.transaction import BuyTransaction, SellTransaction, WalletTransaction
+from payment.transaction import BuyTransaction, SellTransaction, WalletTransaction, StockHolding
 from account.tiingo import get_meta_data, get_price
     
 # Create your views here.
@@ -84,11 +84,10 @@ def stock_buy(request, **ticker):
     #GETS THE USER'S NAME
     profile = request.user
     name = profile.username
-    
     balance = Wallet.objects.order_by('-id').first()       #Balance left in the account
-    amount1 = wallet_balance = float(balance.balance)      #Assigns the wallet balance as a float data type 
-    amount3 = wallet_eq_balance = float(balance.stock_eq)    
     
+    amount1 = float(balance.balance)      #Assigns the wallet balance as a float data type 
+    amount3 = float(balance.stock_eq)    
     amount2 = float(prices)             #Current price of the stock to be purchased
     
     if request.method == "POST":
@@ -98,13 +97,42 @@ def stock_buy(request, **ticker):
         price = total_amount.total_price
         sum_price = float(price)
         
-        
+         
         WalletTransaction_instance = WalletTransaction(amount1, amount3)
         Transaction_instance = BuyTransaction(amount1)                     #Creates a transaction instance for the transaction class witn amount1 as the self.balance
+        StockHoldingTransaction_instance = StockHolding(amount1, amount3)
         shares_bought = Transaction_instance.share_number(sum_price, amount2)
+        
+        
+        #total_equity_in_buy = float(Buy.objects.filter(bought=True).aggregate(Sum('equity'))['equity__sum'])
+        
+        
         if Transaction_instance.charge(amount2, shares_bought):
             Buy_instance = Buy()
             Wallet_instance = Wallet()
+            StockWallet_instance = Stock_Wallet()
+            
+            totalH = Buy.objects.filter(bought=True).aggregate(Sum('shares'))['shares__sum']
+            
+            if totalH is None:    
+                total_shares_in_buy = 0.00
+                StockWallet_instance.user = name
+                StockWallet_instance.name = stock_name
+                StockWallet_instance.equity = sum_price
+                StockWallet_instance.shares = StockHoldingTransaction_instance.buy_shares(shares_bought, total_shares_in_buy)
+                StockWallet_instance.save()
+                
+            else:
+                totalH1 = float(totalH)
+                total_shares_in_buy = totalH1
+                StockWallet_instance.user = name
+                StockWallet_instance.name = stock_name
+                StockWallet_instance.equity = StockHoldingTransaction_instance.buy_stock_eq_update(sum_price)
+                StockWallet_instance.shares = StockHoldingTransaction_instance.buy_shares(shares_bought, total_shares_in_buy)
+                StockWallet_instance.save()
+            
+            
+            
             Buy_instance.user = name
             Buy_instance.name = stock_name
             Buy_instance.bought = True
@@ -113,10 +141,13 @@ def stock_buy(request, **ticker):
             Buy_instance.shares = shares_bought
             Buy_instance.save()
             
+           
             Wallet_instance.user = name
-            Wallet_instance.stock_eq = sum_price
-            Wallet_instance.balance = WalletTransaction_instance.buy_balance_update(sum_price)
+            Wallet_instance.balance = WalletTransaction_instance.buy_balance_update(sum_price)           
+            Wallet_instance.stock_eq = WalletTransaction_instance.buy_stock_eq_update(sum_price)
             Wallet_instance.save() 
+            
+            
             return redirect('payment:done')
         else:
             return redirect('payment:canceled')
@@ -144,33 +175,50 @@ def stock_sell(request, **ticker):
     balance = Wallet.objects.order_by('-id').first()       #Balance left in the account
     amount1 = wallet_balance = float(balance.balance)      #Assigns the wallet balance as a float data type 
     amount3 = wallet_eq_balance = float(balance.stock_eq)            
-    shares_avail = float(data1.shares)
+    avail = Stock_Wallet.objects.order_by('-id').first()
+    shares_avail = float(avail.shares)
+    
+    
     
     if stock_name == stock_name1:  
         if request.method == "POST":
             if form.is_valid():
                 form.save()
             else:
+                print("Error")
                 raise ValueError
+            
             data2 = amount.objects.order_by('-id').first()
-            amount2 = float(data2.total_price)
+            sum_price = data2.total_price
+            amount2 = float(sum_price)
             Transaction_instance = SellTransaction(amount1)                     #Creates a transaction instance for the transaction class witn amount1 as a data input
             
             WalletTransaction_instance = WalletTransaction(wallet_balance, wallet_eq_balance)
-            shares_sold = Transaction_instance.share_number(amount2, stock_price)
+            shares_left = Transaction_instance.share_number(amount2, stock_price)
+            
             if Transaction_instance.sell(amount2, amount3):
                 Sell_instance = Sell()
                 Wallet_instance = Wallet()
+                StockWallet_instance = Stock_Wallet()
+                StockHoldingTransaction_instance = StockHolding(amount1, amount3)
+                
                 Sell_instance.user = name
                 Sell_instance.name = stock_name
                 Sell_instance.sold = True
                 Sell_instance.total_selling_amount = amount2
                 Sell_instance.stock_selling_price = stock_price
-                Sell_instance.shares = shares_sold
+                Sell_instance.shares = shares_left
                 Sell_instance.save()
                 
+                StockWallet_instance.user = name
+                StockWallet_instance.name = stock_name
+                StockWallet_instance.shares = StockHoldingTransaction_instance.sell_shares(shares_left, shares_avail)
+                StockWallet_instance.equity = StockHoldingTransaction_instance.sell_stock_eq_update(amount2)
+                StockWallet_instance.save()
+                
+                
                 Wallet_instance.user = name
-                Wallet_instance.stock_eq = WalletTransaction_instance.stock_eq_update(amount2)
+                Wallet_instance.stock_eq = WalletTransaction_instance.sell_stock_eq_update(amount2)
                 Wallet_instance.balance = WalletTransaction_instance.sell_balance_update(amount2) 
                 Wallet_instance.save()
                 return redirect('payment:done')

@@ -4,7 +4,11 @@ class WalletTransaction():
         self.balance = balance
         self.stock_eq = stock_eq
         
-    def stock_eq_update(self, totalamount): 
+    def buy_stock_eq_update(self, totalamount): 
+        self.stock_eq += totalamount
+        return self.stock_eq   
+     
+    def sell_stock_eq_update(self, totalamount): 
         self.stock_eq -= totalamount
         return self.stock_eq    
     
@@ -16,6 +20,20 @@ class WalletTransaction():
         self.balance += totalamount
         return self.balance 
  
+ 
+class StockHolding(WalletTransaction):
+    def __init__(self, balance, stock_eq):
+        super().__init__(balance, stock_eq, )
+    
+    
+    def buy_shares(self, shares1, shares):
+        shares1 += shares 
+        return shares1
+    
+    def sell_shares(self, shares1, shares):
+        shares -= shares1 
+        return shares
+     
     
 class BuyTransaction():
     def __init__(self, balance, shares=0.0):
@@ -46,14 +64,17 @@ class SellTransaction():
     
     def share_number(self, sell_amount, price):                  #This function calculates the number of shares bought
         numbers = sell_amount / price
-        self.shares -= numbers
-        shares = self.shares
-        return shares
+        
+        if numbers < 0:
+            print("Not Possible")
+        else:
+            return numbers
     
     def sell(self, sell_amount, eq):              #This function is run when the user wants to sell a stock
-        if sell_amount <= eq:
-            eq -= sell_amount
-            return eq
-        else:     
+        if sell_amount > eq:
             print("You dont have that amount of money in equity")
             return False
+        else:     
+            eq -= sell_amount
+            return eq
+        

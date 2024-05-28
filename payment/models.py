@@ -33,10 +33,15 @@ class amount(models.Model):
 
 
 class Wallet(models.Model):
-    user = models.CharField(max_length=200, null = True) 
+    user = models.CharField(max_length=200, null = True)
     balance = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     stock_eq = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
+class Stock_Wallet(models.Model):
+    user = models.CharField(max_length=200, null = True)
+    name = models.CharField(max_length=200, null = True)
+    shares = models.DecimalField(max_digits=10, decimal_places=2, null = True) 
+    equity = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     
 class Sell(models.Model):
     user = models.CharField(max_length=200, null = True)

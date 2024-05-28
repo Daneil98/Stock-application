@@ -20,4 +20,5 @@ urlpatterns = [
     path('ticker/', views.ticker, name='ticker'),
     path('post_list/', views.post_list, name='post_list'),
     path('stocks/', views.stock, name='stocks'),
+    path('my_stocks/', views.my_stocks, name='my_stocks')
 ]
