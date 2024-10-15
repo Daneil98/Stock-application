@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}MY STOCKS{% endblock %}
+
+{% block content %}
+
+    <h2> MY STOCKS </h2>
+    
+    <table class="table text-center">
+        <tr><td><b>COMPANY NAME</b></td> <td><b>EQUITY ($)</b></td> <td><b>SHARES</b></td></tr>
+        {% for asset in assets%}
+            <tr><td> {{ asset.stock_name }}</td> <td>{{ asset.equity }}</td>   <td><b> {{ asset.shares }} </b></td></tr>
+        {% endfor %}
+    </table>
+    
+
+{% endblock %}

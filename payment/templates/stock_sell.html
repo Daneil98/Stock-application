@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<form method="post">
+    <table class="table text-center">
+        {% csrf_token %}
+        {{ form }}
+        <tr><td> Price per share: </td> <td><b>${{ prices }}</b></td></tr>
+        <tr><td> Number of shares:  </td> <td><b>{{ total }}</b></td></tr>
+    </table>
+    <input type="submit" value="Submit">
+{% endblock %}

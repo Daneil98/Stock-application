@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}Edit your account details{% endblock %}
+{% block content %}
+    <h1>Edit your account details</h1>
+    <p>Change your password <a href = "{% url "password_change" %}"> here </a> </p>
+    <p> click <button id="here"> here </button> to generate a secret key for your authenticator app</p>
+    <p>You can edit your account details using the following forms:</p>
+    <form method="post" enctype="multipart/form-data">
+        {{ user_form.as_p }}
+        {{ profile_form.as_p }}
+        {% csrf_token %}
+        <p><input type="submit" value="Save changes"></p>
+    </form>
+
+
+    <script type="text/javascript">
+        function show(secret) {
+            alert("The secret is: " + secret+"." + "\nIt has been copied to your clipboard");
+            navigator.clipboard.writeText(secret).then(function() {
+            }).catch(function(err) {
+                console.error('Error copying text: ', err);
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            document.getElementById("here").onclick = function () {
+                show("{{ secret }}")
+                ;
+            };
+        });
+    
+    </script>
+
+{% endblock %}

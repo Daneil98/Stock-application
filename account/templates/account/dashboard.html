@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+    <h1>Dashboard</h1>
+    
+    <h2> Total deposits:
+        {% if total %}
+            <b><FONT COLOR = "GREEN">${{ total }}</FONT></b>
+        {% else %}
+            <FONT COLOR = "red">$0</FONT>
+        {% endif %}
+    </h2>
+    <h2> Stock equities:
+        {% if equity %}
+            <b><FONT COLOR = "GREEN">${{ equity }}</FONT></b>
+        {% else %}
+            <FONT COLOR = "red"> ${{ equity }} </FONT>
+        {% endif %}
+    </h2>
+    <h2> Stock account balance:
+        {% if balance %}
+            <b><FONT COLOR = "GREEN">${{ balance }}</FONT></b>
+        {% else %}
+            <FONT COLOR = "red">$0</FONT>
+        {% endif %}
+    </h2>
+
+        {{ profile.photo }}
+        <p>Welcome <b>{{ user.username }}.</b></p>
+    
+    <p>You can deposit <a href="{% url 'payment:process' %}"> <b> here </b></a></p>
+
+    <p>You can view your owned stocks <a href="{% url 'my_stocks' %}"> <b> here </b></a></p>
+    <p>You can search for the stock of your choice <a href="{% url "stocks" %}">here</a>.</p>
+    
+{% endblock %}
