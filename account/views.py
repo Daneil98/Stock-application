@@ -6,7 +6,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 from .models import Profile, price_db
-from .forms import LoginForm, UserRegistrationForm, UserEditForm, ProfileEditForm, TickerForm, FAQForm
+from .forms import *
 from django.contrib import messages
 from django.shortcuts import render
 from .tiingo import get_meta_data, get_price
