@@ -3,10 +3,10 @@ from django.db.models import Sum
 from django.shortcuts import render, redirect, get_object_or_404
 from django.conf import settings
 from .forms import BuyForm, SellForm
-from .models import Payment, Buy, Sell, amount, Wallet, Stock_Wallet
+from .models import *
 from account.models import Profile, price_db
 from django.urls import reverse
-from payment.transaction import BuyTransaction, SellTransaction, WalletTransaction, StockHolding
+from payment.transaction import *
 from django.contrib.auth.decorators import login_required
 import pyotp
     
