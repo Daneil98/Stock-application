@@ -13,7 +13,7 @@ DATABASE: dbsqlite3 for now
 THIRD PARTY APIs: Braintree, Tiingo
 
 
-Application is available at <"your ip">:9000 | localhost:9000
+Application is available at <"your ip">:8000 | localhost:8000
 
 
 DESCRIPTION: 
