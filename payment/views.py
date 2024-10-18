@@ -9,7 +9,8 @@ from django.urls import reverse
 from payment.transaction import *
 from django.contrib.auth.decorators import login_required
 import pyotp
-    
+
+
 # Create your views here.
 
 gateway = braintree.BraintreeGateway(settings.BRAINTREE_CONF)
