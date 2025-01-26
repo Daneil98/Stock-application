@@ -1,11 +1,7 @@
 
 STOCK APPLICATION WEB-APP
 
-<<<<<<< HEAD
-A a scalable stock trading platform catering to registered users that provides comprehensive information about publicly listed stocks in the US, allows users to make deposits, purchase, sell and trade stocks with leverage seamlessly and securely through the integration of an authenticator for in-app transactions and third-party APIs, namely Tiingo for market data and Braintree for secure payment(deposit) processing. API Endpoints were also created to allow for CRUD operations.
-=======
 A scalable stock trading platform catering to registered users that provides comprehensive information about publicly listed stocks in the US, allows users to make deposits, purchase, sell and trade stocks with leverage seamlessly and securely through the integration of an authenticator for in-app transactions and third-party APIs, namely Tiingo for market data and Braintree for secure payment(deposit) processing. API Endpoints were also created to allow for CRUD operations.
->>>>>>> e7e97184ca28f6da984e4534de19cb82c51bd117
 
 ## Run Locally
 
@@ -24,21 +20,7 @@ Go to the project directory
 Install dependencies
 
 ```bash
-<<<<<<< HEAD
-  pip install -r requirements.txt
-=======
-  pip install django
-  pip install python 
-  pip install braintree 
-  pip install javascript
-  pip install postgresql
-  pip install djangorestframework
-  pip install celery
-  pip install django_taggit
-  pip install markdown
-  pip install pyotp
-  pip install google-auth
->>>>>>> e7e97184ca28f6da984e4534de19cb82c51bd117
+  pip install -r Requirements.txt
 ```
 
 Start the server
@@ -51,11 +33,7 @@ Start the server
 ## Features
 
 - User Authentication: Sign-up, login, and logout functionality with secure password storage.
-<<<<<<< HEAD
 - Trade: You can buy, sell, short and long US stocks easily.
-=======
-- Trade: You can buy, sell, short and long US stocks with leverage easily.
->>>>>>> e7e97184ca28f6da984e4534de19cb82c51bd117
 - Stock search and information: Search for the desired US stock and get information on it alongside options to trade.
 - Blog: Read articles about the lastest events in the stock market and comment your opinions about the topics.
 - Real Time updates: Depending on your Tiingo subscription plan, you can gain access to realtime updates of the US stock market
@@ -63,7 +41,7 @@ Start the server
 
 ## Environment Variables
 
-To run this project, you will need to add the following environment variables to your .env or settings.py file
+To run this project, you will need to add the following environment variables to your .env file
 
 
 BRAINTREE_MERCHANT_ID = '' 
