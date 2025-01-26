@@ -8,7 +8,7 @@
 
     "routes": [{
         "src": "/(.*)",
-        "dest": "djangoprojectname/wsgi.py"
+        "dest": "my_stock/wsgi.py"
     }]
 }
 =======
