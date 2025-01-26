@@ -29,10 +29,10 @@ LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
 
 
-BRAINTREE_MERCHANT_ID = 'qnk7x4t299nm2wdy' 
-BRAINTREE_PUBLIC_KEY = 'v5ppwdkbcncbbdjc'   
-BRAINTREE_PRIVATE_KEY = 'aa7a80a4504187bbfa820b3f413174c8'
-BRAINTREE_TOKENIZATION_KEY = 'sandbox_rz4k7rvw_qnk7x4t299nm2wdy'
+BRAINTREE_MERCHANT_ID = '' 
+BRAINTREE_PUBLIC_KEY = ''   
+BRAINTREE_PRIVATE_KEY = ''
+BRAINTREE_TOKENIZATION_KEY = ''
 
 BRAINTREE_CONF = braintree.Configuration(
     braintree.Environment.Sandbox,
@@ -49,7 +49,7 @@ CELERY_TASK_SERIALIZER = 'json'
 
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'bd&p_i@jaq&@7kt7)dd)j!3vdr4z)ij&n1z409j*69i&!ll3$v'
+SECRET_KEY = ''
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True

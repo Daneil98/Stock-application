@@ -2,6 +2,7 @@ import braintree
 from django.db.models import Sum
 from django.shortcuts import render, redirect, get_object_or_404
 from django.conf import settings
+<<<<<<< HEAD
 from .forms import *
 from .models import *
 from .tasks import *
@@ -12,6 +13,15 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 import pyotp
 from django.http import JsonResponse
+=======
+from .forms import BuyForm, SellForm
+from .models import *
+from account.models import Profile, price_db
+from django.urls import reverse
+from payment.transaction import *
+from django.contrib.auth.decorators import login_required
+import pyotp
+>>>>>>> e7e97184ca28f6da984e4534de19cb82c51bd117
 
 
 # Create your views here.
@@ -233,6 +243,7 @@ def long_position(request):
                 return redirect('payment:done')
             else:
                 return redirect('payment:canceled')
+<<<<<<< HEAD
         
     return render(request, 'stock_long.html', {'Sell': Sell, 'form': form,  'total': wallet_balance, 'prices': open_price, 'stock': stock_name })
 
@@ -281,3 +292,6 @@ def short_position(request):
                 return redirect('payment:canceled')
         
     return render(request, 'stock_short.html', {'Sell': Sell, 'form': form,  'total': wallet_balance, 'prices': open_price, 'stock': stock_name })
+=======
+    return render(request, 'stock_sell.html', {'Sell': Sell, 'form': form, 'total': shares_avail, 'prices': stock_price, 'stock': stock_name })
+>>>>>>> e7e97184ca28f6da984e4534de19cb82c51bd117
