@@ -7,15 +7,7 @@ from django.utils.translation import gettext_lazy as _
 
 
 #USER ACCOUNT FORMS
-
-class WithdrawForm(forms.ModelForm):
-    amount = forms.FloatField(label='How much do you want to deposit?')
-    description = forms.CharField(label='add a note to your payment', required=False)
     
-    class Meta:
-        model = Payment
-        fields = ('amount', 'description')
-
 class BuyForm(forms.ModelForm):
     total_price = forms.FloatField(label='How much do you want to buy?')
     otp = forms.IntegerField(label='Enter code from authenticator:')
@@ -31,3 +23,22 @@ class SellForm(forms.ModelForm):
     class Meta:
         model = amount
         fields = ('total_price', 'otp')     
+
+class LongForm(forms.ModelForm):
+    total_price = forms.FloatField(label='How much do you want to trade?')
+    leverage = forms.IntegerField(label='How much leverage do you want (1-10)?')
+    otp = forms.IntegerField(label='Enter code from authenticator:')
+    
+    class Meta:
+        model = amount
+        fields = ('total_price', 'leverage', 'otp')   
+        
+
+class ShortForm(forms.ModelForm):
+    total_price = forms.FloatField(label='How much do you want to trade?')
+    leverage = forms.IntegerField(label='How much leverage do you want (1-10)?')
+    otp = forms.IntegerField(label='Enter code from authenticator:')
+    
+    class Meta:
+        model = amount
+        fields = ('total_price', 'leverage', 'otp')   

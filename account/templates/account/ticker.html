@@ -18,6 +18,10 @@
         </table>
         <button id="Buy" class="float-left submit-button" >Buy</button>
         <button id="Sell" class="float-right submit-button" >Sell</button>
+        <br>
+        <br>
+        <button id="Long" class="float-left submit-button" >Long</button>
+        <button id="Short" class="float-right submit-button" >Short</button>
     </div>
 
     <script type="text/javascript">
@@ -28,10 +32,33 @@
     </script>
 
     <script type="text/javascript">
+        document.getElementById("Long").onclick = function () {
+            location.href = "{% url 'payment:stock_long' %}";
+        };
+        var closePrice = {{ price.close }};
+    </script>
+
+
+    <script type="text/javascript">
         document.getElementById("Sell").onclick = function () {
             location.href = "{% url 'payment:stock_sell' %}";
         };
-        var openPrice = {{ price.open }};
+    
+        try {
+            var openPrice = {{ price.open }};
+        } catch (error) {
+            console.error("Error occurred:", error);
+            // Reload the page if an error occurs
+            window.location.reload();
+        }
+    </script>
+
+
+    <script type="text/javascript">
+        document.getElementById("Short").onclick = function () {
+            location.href = "{% url 'payment:stock_short' %}";
+        };
+        var closePrice = {{ price.close }};
     </script>
 
 {% endblock %}

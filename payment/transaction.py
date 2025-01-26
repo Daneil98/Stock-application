@@ -78,3 +78,37 @@ class SellTransaction():
             eq -= sell_amount
             return eq
         
+        
+class Trading():
+    def __init__(self, balance, leverage):
+        self._balance = balance
+        self._leverage = leverage
+      
+        
+    def long_position(self, amount, long_price, current_price):
+        if long_price <= 0 or current_price <= 0:
+            raise ValueError("Prices must be positive and greater than zero.")
+    
+        if amount <= 0:
+            raise ValueError("Amount must be positive and greater than zero.")
+        
+        spread = (current_price - long_price) / current_price                         #When going long, we make profit when the current price is greater than the long price
+        returns = spread * self._leverage * amount
+        return returns
+        
+    
+    def short_position(self, amount, short_price, current_price):
+        if short_price <= 0 or current_price <= 0:
+            raise ValueError("Prices must be positive and greater than zero.")
+    
+        if amount <= 0:
+            raise ValueError("Amount must be positive and greater than zero.")
+        
+        spread = (short_price - current_price) / short_price                   #When going short, we make profit when the current price is less than the short price
+        returns = spread * self._leverage * amount
+        return returns    
+        
+    def close_position(self, returns):
+        self._balance += returns
+        return self._balance
+    

@@ -1,5 +1,4 @@
 from django.views.decorators.csrf import csrf_exempt
-from django.db.models import Sum
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login
@@ -8,10 +7,8 @@ from django.shortcuts import get_object_or_404
 from .models import Profile, price_db
 from .forms import LoginForm, UserRegistrationForm, UserEditForm, ProfileEditForm, TickerForm, FAQForm
 from django.contrib import messages
-from django.shortcuts import render
 from .tiingo import get_meta_data, get_price
-from django.shortcuts import render
-from payment.models import Wallet, Payment, Stock_Wallet
+from payment.models import Wallet, Payment, Stock_Wallet, Long, Short
 import pyotp
 
 
@@ -55,33 +52,47 @@ def user_login(request):
 @login_required
 def dashboard(request):
     
-    total_amount = Payment.objects.filter(paid=True).aggregate(Sum('amount'))['amount__sum']
-    total = f"{float(total_amount):.2f}"
-    recent = Wallet.objects.order_by('-id').first()
+    name = request.user.username
+    total_amount = Payment.objects.filter(user=name, paid=True).last()
     
-    if recent:
+    recent = Wallet.objects.filter(user=name).last()
+    
+    if recent and total_amount:
         equity = f"{float(recent.stock_eq):.2f}"
         balance = f"{float(recent.balance):.2f}"
+        total = f"{float(total_amount.amount):.2f}"
         
     else:
         equity = 0
         balance = 0
+        total = 0
     
     return render(request, 'account/dashboard.html', {'section': 'dashboard', 'total': total, 'equity': equity, 'balance': balance})
 
+
+@login_required
 def my_stocks(request):
-    stocks_owned = Stock_Wallet.objects.order_by('-id').all()
-    assets_dict = {}
-
-    for stock in stocks_owned:
-        if stock.name not in assets_dict:
-            assets_dict[stock.name] = {
-                'equity': f"{float(stock.equity):.2f}",
-                'shares': f"{float(stock.shares):.2f}"
-            }
-
-    assets = [{'stock_name': name, 'equity': data['equity'], 'shares': data['shares']} for name, data in assets_dict.items()]
-    return render(request, 'account/my_stocks.html', {'section': 'my_stocks', 'assets': assets})
+    name = request.user.username
+    
+    stocks_owned = Stock_Wallet.objects.filter(user=name).all()
+    
+    long_trades = Long.objects.filter(user=name).all()
+    short_trades = Short.objects.filter(user=name).all()
+    
+    if not long_trades.exists() and not short_trades.exists():
+        # Handle case where there are no trades
+        context = {'message': 'No trades available for this user.', 'long_trades': None, 'short_trades': None}
+    
+    else:
+        context = {'long_trades': long_trades, 'short_trades': short_trades}
+    
+    if not stocks_owned.exists():
+        # Handle case where there are no trades
+        assets = {'message': 'No trades available for this user.', 'stocks_owned': None}
+    
+    else:
+        assets = {'stocks_owned': stocks_owned,}
+    return render(request, 'account/my_stocks.html', {'assets': assets, 'context': context})
 
 
 def register(request):
@@ -141,7 +152,6 @@ def stock(request):
 @csrf_exempt
 def ticker(request, **ticker):  
     ticker = request.POST['ticker']
-    stock_instance = price_db()                     #Create a stock instance for the price_db model
     prize = {'type': get_price(ticker)}
     price = (prize["type"])                         #Sets price as a dictionary with prize and type as key-value pair
     close_price = price['close']                    # Extracts the "close" value
@@ -151,12 +161,9 @@ def ticker(request, **ticker):
     meta = (name['typ'])
     stock_name = meta['name']
     
-    user = request.user                     #Request user
-    stock_instance.user = user.username
-    stock_instance.closeprice = close_price
-    stock_instance.openprice = open_price
-    stock_instance.name = stock_name
-    stock_instance.save()
+    user_name = request.user.username                     #Request user
+    price_db.objects.create(user = user_name, closeprice = close_price, 
+        openprice = open_price, name = stock_name, ticker = ticker)
     
     return render(request, 'account/ticker.html', {'ticker': ticker, 'meta': get_meta_data(ticker), 'price': get_price(ticker)})
 

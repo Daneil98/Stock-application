@@ -1,31 +1,54 @@
+
 STOCK APPLICATION WEB-APP
 
-LANGUAGES: Python, HTML, CSS, JS
+A a scalable stock trading platform catering to registered users that provides comprehensive information about publicly listed stocks in the US, allows users to make deposits, purchase, sell and trade stocks with leverage seamlessly and securely through the integration of an authenticator for in-app transactions and third-party APIs, namely Tiingo for market data and Braintree for secure payment(deposit) processing. API Endpoints were also created to allow for CRUD operations.
+
+## Run Locally
+
+Clone the project
+
+```bash
+  git clone https://github.com/Daneil98/Stock-application
+```
+
+Go to the project directory
+
+```bash
+  cd Stock-application
+```
+
+Install dependencies
+
+```bash
+  pip install -r requirements.txt
+```
+
+Start the server
+
+```bash
+  python manage.py runserver
+```
 
 
-FRAMEWORK: Django 
+## Features
+
+- User Authentication: Sign-up, login, and logout functionality with secure password storage.
+- Trade: You can buy, sell, short and long US stocks easily.
+- Stock search and information: Search for the desired US stock and get information on it alongside options to trade.
+- Blog: Read articles about the lastest events in the stock market and comment your opinions about the topics.
+- Real Time updates: Depending on your Tiingo subscription plan, you can gain access to realtime updates of the US stock market
+- In-app Authorization: An otp from Google authenticator is required everytime you want to make a trade, adding another layer of security to the platform.
+
+## Environment Variables
+
+To run this project, you will need to add the following environment variables to your .env or settings.py file
 
 
+BRAINTREE_MERCHANT_ID = '' 
+BRAINTREE_PUBLIC_KEY = ''   
+BRAINTREE_PRIVATE_KEY = ''
+BRAINTREE_TOKENIZATION_KEY = ''
 
-DATABASE: dbsqlite3 for now
-
-
-THIRD PARTY APIs: Braintree, Tiingo
-
-
-Application is available at <"your ip">:9000 | localhost:9000
-
-
-DESCRIPTION: 
-A Stock Market webapp catering to registered users who have access to comprehensive information about publicly listed companies 
-in the US stock market. The platform enables users to make deposits and purchase stocks seamlessly and securely through the 
-integration of an authenticator for in-app transactions and third-party APIs, namely Tiingo for market data and Braintree for 
-secure payment(deposit) processing. 
-API Endpoints were also created to allow for CRUD operations.
-
-
-
-DUMMY CARD DETAILS FOR DEPOSIT:
-Card No: 4111 1111 1111 1111
-Expiry date: 12/28
-CVV: 123
+CELERY_BROKER_URL = ''
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'

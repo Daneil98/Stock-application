@@ -3,8 +3,12 @@
 {% block title %}Pay by credit card{% endblock %}
 
 {% block content %}
+
     <h1>Deposit with your card</h1>
     <form id="payment" method="post">
+
+        <label for="amount">Amount:</label>
+        <input type="number" name="amount" id="amount" min="0" step="0.01" required>
         
         <label for="card-number">Card Number</label>
         <div id="card-number" class="field"></div>
@@ -27,15 +31,15 @@
     <script>
         var form = document.querySelector('#Payment');
         var submit = document.querySelector('input[type="submit"]');
-
+    
         braintree.client.create({
-            authorization: '{{ client_token }}'
+            authorization: '{{ client_token }}' // Replace with the correct variable for your client token
         }, function (clientErr, clientInstance) {
             if (clientErr) {
-                console.error(clientErr);
+                console.error('Error creating Braintree client:', clientErr);
                 return;
             }
-
+    
             braintree.hostedFields.create({
                 client: clientInstance,
                 styles: {
@@ -44,33 +48,55 @@
                     'input.valid': {'color': 'green'}
                 },
                 fields: {
-                    number: {selector: '#card-number'},
-                    cvv: {selector: '#cvv'},
-                    expirationDate: {selector: '#expiration-date'}
+                    number: {
+                        selector: '#card-number',
+                        placeholder: '4111 1111 1111 1111'
+                    },
+                    cvv: {
+                        selector: '#cvv',
+                        placeholder: '123'
+                    },
+                    expirationDate: {
+                        selector: '#expiration-date',
+                        placeholder: 'MM/YY'
+                    }
                 }
             }, function (hostedFieldsErr, hostedFieldsInstance) {
                 if (hostedFieldsErr) {
-                    console.error(hostedFieldsErr);
+                    console.error('Error creating Hosted Fields:', hostedFieldsErr);
                     return;
                 }
-
+    
+                // Enable the submit button
                 submit.removeAttribute('disabled');
-
+    
                 form.addEventListener('submit', function (event) {
-                    event.preventDefault();
-
+                    event.preventDefault(); // Prevent default form submission
+    
                     hostedFieldsInstance.tokenize(function (tokenizeErr, payload) {
                         if (tokenizeErr) {
-                            console.error(tokenizeErr);
+                            console.error('Error tokenizing card:', tokenizeErr);
                             return;
                         }
-                        // set nonce to send to the server
+    
+                        // Add the amount to the form dynamically
+                        var amount = document.getElementById('amount'); // Assuming there's an input or element for the amount
+                        if (amount) {
+                            var amountInput = document.createElement('input');
+                            amountInput.type = 'hidden';
+                            amountInput.name = 'amount';
+                            amountInput.value = amount.value; // Set the value of the amount
+                            form.appendChild(amountInput);
+                        }
+    
+                        // Set the nonce to send to the server
                         document.getElementById('nonce').value = payload.nonce;
-                        // submit form
-                        document.getElementById('Payment').submit();
+    
+                        // Submit the form
+                        form.submit();
                     });
                 }, false);
             });
         });
-    </script>
+    </script>    
 {% endblock %}

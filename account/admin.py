@@ -7,8 +7,8 @@ from .models import Profile, price_db
 
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
-    list_display = ['user', 'date_of_birth', 'photo']
+    list_display = ['user']
 
 @admin.register(price_db)
 class price_dbAdmin(admin.ModelAdmin):
-    list_display = ['name', 'closeprice', 'openprice']
+    list_display = ['name', 'ticker', 'closeprice', 'openprice']

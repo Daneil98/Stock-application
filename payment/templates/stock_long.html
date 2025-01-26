@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<form method="post">
+    
+    <table class="table text-center">
+        <h3 style="text-align: center;"><b> Long Position </b></h3>
+        <h4>How much of <b>{{ stock }}</b> stock do you want to trade?:</h4> 
+        {% csrf_token %}
+        {{ form }}
+        <tr><td> Price per share: </td> <td><b>${{ prices }}</b></td></tr>
+        <tr><td> Trading power:  </td> <td><b>${{ total }}</b></td></tr>
+    </table>
+    <input type="submit" value="Submit">
+{% endblock %}

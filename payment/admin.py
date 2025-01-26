@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Payment, Buy, amount, Sell, Wallet, Stock_Wallet
+from .models import *
 # Register your models here.
 
 @admin.register(Payment)
@@ -27,3 +27,11 @@ class WallettAdmin(admin.ModelAdmin):
 @admin.register(Stock_Wallet)
 class Stock_WallettAdmin(admin.ModelAdmin):
     list_display = ['user', 'name', 'shares', 'equity']
+    
+@admin.register(Long)
+class LongAdmin(admin.ModelAdmin):
+    list_display = ['user', 'name', 'ticker', 'amount', 'leverage','long_price', 'current_price', 'returns', 'open']
+
+@admin.register(Short)
+class ShortAdmin(admin.ModelAdmin):
+    list_display = ['user', 'name', 'ticker', 'amount', 'leverage','short_price', 'current_price', 'returns', 'open']

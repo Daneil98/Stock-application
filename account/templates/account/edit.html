@@ -3,7 +3,8 @@
 {% block content %}
     <h1>Edit your account details</h1>
     <p>Change your password <a href = "{% url "password_change" %}"> here </a> </p>
-    <p> click <button id="here"> here </button> to generate a secret key for your authenticator app</p>
+    <p> Click <button id="here"> here </button> to generate a secret key for your authenticator app.</p>
+    <p> Copy the code and paste it in your google authenticator app so you can use the time-based otps </p>
     <p>You can edit your account details using the following forms:</p>
     <form method="post" enctype="multipart/form-data">
         {{ user_form.as_p }}
@@ -15,7 +16,7 @@
 
     <script type="text/javascript">
         function show(secret) {
-            alert("The secret is: " + secret+"." + "\nIt has been copied to your clipboard");
+            alert("The secret is: " + secret+"." + "\nIt has been copied to your clipboard. Make sure you allow this site access to your clipboard");
             navigator.clipboard.writeText(secret).then(function() {
             }).catch(function(err) {
                 console.error('Error copying text: ', err);

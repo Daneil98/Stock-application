@@ -1,25 +1,40 @@
-from django.urls import path
-
+from django.urls import path, include
 from . import views
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
-app_name = 'payment'
+
+app_name = 'api'
+
 
 urlpatterns = [
-    path('deposit_list/', views.PaymentListView.as_view(), name='deposit_list'),
-    path('deposit/', views.Payment.as_view(), name='deposit'),
     
-    path('wallet/', views.WalletListView.as_view(), name='wallet_view'),
-    path('wallet/<pk>/', views.WalletDetailView.as_view(), name='wallet_detail'),
+    path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),        #Good
+    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),       #Good
+    
+    path('login/', views.LoginView.as_view(), name='login'),                        #Good
+    path('register/', views.RegisterView.as_view(), name='register'),               #Good
+    
+    
+    path('deposit_list/', views.PaymentListView.as_view(), name='deposit_list'),    #Good
+    path('deposit/', views.Deposit.as_view(), name='deposit'),                      #Good
+    
+    
+    path('ticker/', views.Ticker.as_view(), name='ticker'),                         #Good
+    path('my_stocks/', views.MyStocks.as_view(), name='my_stocks'),                 #Good
+    path('dashboard/', views.Dashboard.as_view(), name='dashboard'),                #Good
+    path('edit/', views.Edit.as_view(), name='edit'),                               #Good
+    
+    path('stock_buy/', views.StockBuy.as_view(), name='stock_buy'),                 #Good
+    path('stock_buys/', views.BuyView.as_view(), name='stock_buys'),                #Good
+    
+    path('stock_sell/', views.StockSell.as_view(), name='stock_sell'),              #Good
+    path('stock_sells/', views.SellListView.as_view(), name='stock_sells'),         #Good
+    
+    
+    path('amount/', views.AmountView.as_view(), name='amount'),                     #Good
     
 
-    path('buy/', views.BuyView.as_view(), name='buy'),
-    path('buy_stock/', views.BuyUpdate.as_view(), name='buy_stock'),
+    path('long/', views.LongPosition.as_view(), name='long'),                       #Good
+    path('short/', views.ShortPosition.as_view(), name='short'),                    #Good
 
-    path('sell/', views.SellDetailView.as_view(), name='sell'),
-    path('sell_stock/', views.SellUpdate.as_view(), name='sell_stock'),
-    
-    path('stock_wallet/', views.StockWalletView.as_view(), name='stockwallet_view'),
-    path('stock_wallet_update/', views.StockWalletUpdate.as_view(), name='stock_wallet_update'),
-    
-    path('amount/<pk>/', views.AmountView.as_view(), name='amount'),
 ]

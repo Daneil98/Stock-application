@@ -5,7 +5,7 @@
 {% block content %}
     <h1>Dashboard</h1>
     
-    <h2> Total deposits:
+    <h2> Total amount deposited:
         {% if total %}
             <b><FONT COLOR = "GREEN">${{ total }}</FONT></b>
         {% else %}
@@ -27,12 +27,14 @@
         {% endif %}
     </h2>
 
-        {{ profile.photo }}
-        <p>Welcome <b>{{ user.username }}.</b></p>
+    <p>Welcome <b>{{ user.username }}.</b></p>
     
-    <p>You can deposit <a href="{% url 'payment:process' %}"> <b> here </b></a></p>
+    <p><b> To be able to trade, make sure you copy the code from your <a href="{% url 'edit' %}"> <b> profile </b></a> and paste it in your google authenticator app so you can use the time-based otps. </b></p>
 
-    <p>You can view your owned stocks <a href="{% url 'my_stocks' %}"> <b> here </b></a></p>
+
+    <p>You can deposit <a href="{% url 'payment:process' %}"><b> here </b></a></p>
+
+    <p>You can view your owned stocks and trades<a href="{% url 'my_stocks' %}"> <b> here </b></a></p>
     <p>You can search for the stock of your choice <a href="{% url "stocks" %}">here</a>.</p>
     
 {% endblock %}

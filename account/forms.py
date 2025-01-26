@@ -18,9 +18,6 @@ class UserRegistrationForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ('username', 'first_name')
-        widgets = {
-            'date_of_birth': DateInput(attrs={'type': 'date'})
-        }
 
     def clean_password2(self):
         cd = self.cleaned_data
@@ -37,10 +34,7 @@ class UserEditForm(forms.ModelForm):
 class ProfileEditForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ( 'secret_key', 'phone', 'address', 'date_of_birth', 'photo')
-        widgets = {
-            'date_of_birth': DateInput(attrs={'type': 'date'})
-        }
+        fields = ( 'secret_key',)
 
 class FAQForm(forms.Form):
     question = forms.CharField(label='Question', max_length=150, required=False)
