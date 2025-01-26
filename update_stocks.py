@@ -9,7 +9,7 @@ from account.models import Profile
 from payment.transaction import Trading
 from payment.models import Long, Short, Wallet
 
-#THIS SCRIPT IS TO UPDATE YOUR TRADES EVERYDAY OR WHEN IT IS RUN
+#THIS SCRIPT IS TO UPDATE ALL USERS TRADES EVERYDAY OR WHEN IT IS RUN
 headers = {
         'Content-Type': 'application/json',
     }
