@@ -52,3 +52,5 @@ BRAINTREE_TOKENIZATION_KEY = ''
 CELERY_BROKER_URL = ''
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
+
+NOTE: I used RabbitMQ as my Celery broker
