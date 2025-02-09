@@ -12,6 +12,7 @@ urlpatterns = [
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),       #Good
     
     path('login/', views.LoginView.as_view(), name='login'),                        #Good
+    path('logout/', views.LogoutView.as_view(), name='logout'),                        #Good
     path('register/', views.RegisterView.as_view(), name='register'),               #Good
     
     
