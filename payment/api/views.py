@@ -4,6 +4,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework_simplejwt.tokens import RefreshToken
 from ..models import *
 from ..transaction import *
 from account.models import *
@@ -66,6 +67,22 @@ class LoginView(APIView):
         else:
             raise AuthenticationFailed("Invalid username or password")
 
+
+class LogoutView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        try:
+            # Get the refresh token from request data
+            refresh_token = request.data.get("refresh_token")
+            if refresh_token:
+                # Blacklist the refresh token
+                token = RefreshToken(refresh_token)
+                token.blacklist()
+                return Response({"message": "Logout successful"}, status=200)
+            return Response({"error": "No refresh token provided"}, status=400)
+        except Exception as e:
+            return Response({"error": str(e)}, status=400)
 
 
 #PAYMENT API VIEWS
