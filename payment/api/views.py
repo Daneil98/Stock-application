@@ -61,7 +61,9 @@ class LoginView(APIView):
             if user.is_active:
                 # Log the user in (creates a session)
                 login(request, user)
-                return Response({'status': 'success', 'message': 'Logged in successfully'}, status=status.HTTP_200_OK)
+                refresh = RefreshToken.for_user(user)
+                access_token = str(refresh.access_token)
+                return Response({'status': 'success', 'message': 'Logged in successfully', "access_token": access_token, "refresh_token": str(refresh),}, status=status.HTTP_200_OK)
             else:
                 return Response({'status': 'failed', 'message': 'User account is inactive'}, status=status.HTTP_403_FORBIDDEN)
         else:
