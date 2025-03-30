@@ -15,7 +15,7 @@ import braintree
 import dj_database_url
 from datetime import timedelta
 
-BROKER_URL = os.environ.get("BROKER_URL")
+
 BRAINTREE_MERCHANT_ID = os.environ.get("BRAINTREE_MERCHANT_ID")
 BRAINTREE_PUBLIC_KEY =  os.environ.get("BRAINTREE_PUBLIC_KEY")
 BRAINTREE_PRIVATE_KEY = os.environ.get("BRAINTREE_PRIVATE_KEY")
@@ -45,7 +45,7 @@ BRAINTREE_CONF = braintree.Configuration(
 )
 
 
-CELERY_BROKER_URL = 'amqp://guest:guest@localhost:5672/'
+CELERY_BROKER_URL = os.environ.get("CELERY_BROKER_URL")
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 
@@ -55,7 +55,7 @@ CELERY_TASK_SERIALIZER = 'json'
 SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get("DEBUG", "False").lower() == "true"
 
 ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS").split(" ")
 
@@ -139,7 +139,6 @@ if not DEBUG:
     DATABASES = {
 	"default": dj_database_url.parse(os.environ.get("DATABASE_URL"))
 }
-
 
 else:
 

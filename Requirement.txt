@@ -1,8 +1,7 @@
 Django==5.1.6
-Python==3.9
 djangorestframework==3.14.0
-django_taggit==1.2.0
-dj_database_url=2.3.0
+django_taggit==6.1.0
+dj_database_url==2.3.0
 markdown==3.2.1
 braintree==4.21.0
 pyotp==2.9.0
@@ -19,3 +18,5 @@ python-dotenv==1.0.1
 whitenoise==6.9.0
 yarl==1.18.3
 gunicorn==23.0.0
+django-environ==0.11.2
+tzdata==2025.1

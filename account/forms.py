@@ -1,7 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
 from .models import Profile, price_db
-from socket import fromshare
 from django.forms.widgets import DateInput
 from django.utils.translation import gettext_lazy as _
 
