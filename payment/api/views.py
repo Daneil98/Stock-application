@@ -4,6 +4,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework_simplejwt.tokens import RefreshToken
 from ..models import *
 from ..transaction import *
 from account.models import *
@@ -60,14 +61,31 @@ class LoginView(APIView):
             if user.is_active:
                 # Log the user in (creates a session)
                 login(request, user)
-                return Response({'status': 'success', 'message': 'Logged in successfully'}, status=status.HTTP_200_OK)
+                refresh = RefreshToken.for_user(user)
+                access_token = str(refresh.access_token)
+                return Response({'status': 'success', 'message': 'Logged in successfully', "access_token": access_token, "refresh_token": str(refresh)}, status=status.HTTP_200_OK)
             else:
                 return Response({'status': 'failed', 'message': 'User account is inactive'}, status=status.HTTP_403_FORBIDDEN)
         else:
             raise AuthenticationFailed("Invalid username or password")
 
 
+class LogoutView(APIView):
+    permission_classes = [IsAuthenticated]
 
+    def post(self, request):
+        try:
+            # Get the refresh token from request data
+            refresh_token = request.data.get("refresh_token")
+            if refresh_token:
+                # Blacklist the refresh token
+                token = RefreshToken(refresh_token)
+                token.blacklist()
+                return Response({"message": "Logout successful"}, status=200)
+            return Response({"error": "No refresh token provided"}, status=400)
+        except Exception as e:
+            return Response({"error": str(e)}, status=400)
+        
 #PAYMENT API VIEWS
 
 
@@ -143,7 +161,7 @@ class Edit(APIView):
     
 class MyStocks(generics.RetrieveAPIView):
     queryset = Stock_Wallet.objects.all()
-    authentication_classes = [ JWTAuthentication]
+    authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
     
     def get(self, request):
@@ -570,12 +588,10 @@ class LongPosition(APIView):
                     leverage = leverage_used, current_price = close_price, long_price = open_price, 
                     returns = Trading_instance.long_position(sum_price, open_price, close_price))
 
-               
 
                 balances.balance -= sum_price
                 balances.save()
-                
-
+            
                 data.delete()
                 return Response({'status': 'success', 'message': 'Your transaction was successful'}, status=status.HTTP_200_OK)
             else:

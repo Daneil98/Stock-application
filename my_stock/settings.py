@@ -12,7 +12,14 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 import os
 import braintree
+import dj_database_url
 from datetime import timedelta
+
+BROKER_URL = os.environ.get("BROKER_URL")
+BRAINTREE_MERCHANT_ID = os.environ.get("BRAINTREE_MERCHANT_ID")
+BRAINTREE_PUBLIC_KEY =  os.environ.get("BRAINTREE_PUBLIC_KEY")
+BRAINTREE_PRIVATE_KEY = os.environ.get("BRAINTREE_PRIVATE_KEY")
+BRAINTREE_TOKENIZATION_KEY = os.environ.get("BRAINTREE_TOKENIZATION_KEY")
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -29,10 +36,7 @@ LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
 
 
-BRAINTREE_MERCHANT_ID = 'qnk7x4t299nm2wdy' 
-BRAINTREE_PUBLIC_KEY = 'v5ppwdkbcncbbdjc'   
-BRAINTREE_PRIVATE_KEY = 'aa7a80a4504187bbfa820b3f413174c8'
-BRAINTREE_TOKENIZATION_KEY = 'sandbox_rz4k7rvw_qnk7x4t299nm2wdy'
+
 
 BRAINTREE_CONF = braintree.Configuration(
     braintree.Environment.Sandbox,
@@ -49,12 +53,12 @@ CELERY_TASK_SERIALIZER = 'json'
 
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'bd&p_i@jaq&@7kt7)dd)j!3vdr4z)ij&n1z409j*69i&!ll3$v'
+SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1']
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS").split(" ")
 
 
 SIMPLE_JWT = {
@@ -83,6 +87,7 @@ INSTALLED_APPS = [
     'django.contrib.admin',
     'rest_framework',
     'rest_framework_simplejwt',
+    'django_celery_beat',
 ]
 
 
@@ -112,7 +117,7 @@ ROOT_URLCONF = 'my_stock.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [TEMPLATE_DIR],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -131,12 +136,20 @@ WSGI_APPLICATION = 'my_stock.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+if not DEBUG:
+    DATABASES = {
+	"default": dj_database_url.parse(os.environ.get("DATABASE_URL"))
 }
+
+
+else:
+
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 
 # Password validation
@@ -181,8 +194,15 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticStorage"
+
+MEDIA_URL = '/media/'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Default primary key field type
-# https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
+# https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

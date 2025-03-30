@@ -24,14 +24,14 @@ def get_price(ticker):
 
 
 def update_long():
-    trades = Long.objects.filter(user=name).all()
-    balance = Wallet.objects.filter(user=name).last()
 
     users = Profile.objects.order_by('user').all()
     
     for user in users:
         name = user.user.username 
-        
+        trades = Long.objects.filter(user=name).all()
+        balance = Wallet.objects.filter(user=name).last()
+    
         for trade in trades:
             long_price = trade.long_price
             leverage = trade.leverage
@@ -75,3 +75,12 @@ def update_short():
 
 update_long()
 update_short()
+
+
+"""
+from myapp.tasks import sample_task
+sample_task.delay()
+
+celery -A project worker --loglevel=info
+
+"""

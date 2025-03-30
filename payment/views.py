@@ -67,6 +67,7 @@ def payment_process(request):
         client_token = 'sandbox_rz4k7rvw_qnk7x4t299nm2wdy'
         return render(request, 'process.html', {'Payment': Payment, 'client_token': client_token})
 
+
 @login_required
 def payment_done(request):
     return render(request, 'payment/done.html')
@@ -112,13 +113,17 @@ def stock_buy(request):
             shares_bought = float(sum_price / prices)
             
             if totp.verify(otp):
-                update_stock_wallet(name, stock_name, shares_bought, sum_price, sign)               #updates the user's stock wallet
-
-                update_wallet(name, wallet_balance, stock_eq, sum_price, sign)                       #Updates the user's wallet
+                wallet = Wallet.objects.filter(user=name).last()
+                update_stock_wallet(name, stock_name, shares_bought, sum_price, sign)               #celery task updates the user's stock wallet
+                
+                stock_wallet, created = Stock_Wallet.objects.get_or_create(user=name, name=stock_name)
+                update_wallet(name, wallet_balance, stock_eq, sum_price, sign)                       #celery task updates the user's wallet
                 
                 Buy.objects.create(user = name, name = stock_name, bought = True,                   #Documents the user's purchase
                     stock_purchase_price = prices, total_purchase_amount = sum_price, shares = shares_bought)              
                 
+                stock_wallet.save()
+                wallet.save()
                 total_amount.delete()                                                               #Deletes amount_db entry
                 data.delete()                                                                       #Deletes price_db entry
                 
@@ -155,7 +160,7 @@ def stock_sell(request):
     
     #STOCK DATA FROM THE BUY MODEL DB
     StockWallet_instance = get_stock_wallet(user_name, stock_name)
-    
+
     if StockWallet_instance is None:
         return redirect('my_stocks')
 
@@ -172,14 +177,17 @@ def stock_sell(request):
                 shares_sell = float(sum_price/stock_price)                                    #Calculates the number of shares to be sold
                 
                 if totp.verify(otp):
-                    update_stock_wallet(user_name, stock_name, shares_sell, sum_price, sign)          #Updates the user's stock_wallet
-                    
+                    update_stock_wallet(StockWallet_instance, user_name, stock_name, shares_sell, sum_price, sign)          #Updates the user's stock_wallet
+                    wallet = Wallet.objects.filter(user=user_name).last()
                     Sell.objects.create(user = user_name, name = stock_name, #ticker=ticker,                  #Documents the user's sale
                         sold = True, total_selling_amount = sum_price, stock_selling_price = stock_price, 
                         shares = shares_sell)
                     
-                    update_wallet(user_name, wallet_balance, wallet_eq_balance, sum_price, sign)      #Updates the user's wallet
-                   
+                    update_wallet(wallet, user_name, wallet_balance, wallet_eq_balance, sum_price, sign)      #Updates the user's wallet
+
+
+                    StockWallet_instance.save()
+                    wallet.save()
                     data2.delete()                      #Deletes the specific amount instance to save space
                     data.delete()
                     return redirect('payment:done')
@@ -225,9 +233,10 @@ def long_position(request):
             
             
             if totp.verify(otp):
-                
-                create_trade(user_name, stock_name, ticker, leverage, sum_price, close_price, open_price, balance, sign)
-    
+                wallet = Wallet.objects.filter(user=user_name).last()
+                create_trade(wallet, user_name, stock_name, ticker, leverage, sum_price, close_price, open_price, balance, sign)
+
+                wallet.save()
                 Amount.delete()
                 data.delete()
                 return redirect('payment:done')
@@ -271,9 +280,10 @@ def short_position(request):
             leverage = Amount.leverage                                              # Leverage used          
             
             if totp.verify(otp):
-  
-                create_trade(user_name, stock_name, ticker, leverage, sum_price, close_price, open_price, balance, sign)
+                wallet = Wallet.objects.filter(user=user_name).last()
+                create_trade(wallet, user_name, stock_name, ticker, leverage, sum_price, close_price, open_price, balance, sign)
                 
+                wallet.save()
                 Amount.delete()
                 data.delete()
                 return redirect('payment:done')
