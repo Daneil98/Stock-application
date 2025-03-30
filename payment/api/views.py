@@ -63,11 +63,7 @@ class LoginView(APIView):
                 login(request, user)
                 refresh = RefreshToken.for_user(user)
                 access_token = str(refresh.access_token)
-<<<<<<< HEAD
                 return Response({'status': 'success', 'message': 'Logged in successfully', "access_token": access_token, "refresh_token": str(refresh)}, status=status.HTTP_200_OK)
-=======
-                return Response({'status': 'success', 'message': 'Logged in successfully', "access_token": access_token, "refresh_token": str(refresh),}, status=status.HTTP_200_OK)
->>>>>>> c10156f6bfc1505e8535eeb60382a46027df7d80
             else:
                 return Response({'status': 'failed', 'message': 'User account is inactive'}, status=status.HTTP_403_FORBIDDEN)
         else:
@@ -76,23 +72,6 @@ class LoginView(APIView):
 
 class LogoutView(APIView):
     permission_classes = [IsAuthenticated]
-<<<<<<< HEAD
-=======
-
-    def post(self, request):
-        try:
-            # Get the refresh token from request data
-            refresh_token = request.data.get("refresh_token")
-            if refresh_token:
-                # Blacklist the refresh token
-                token = RefreshToken(refresh_token)
-                token.blacklist()
-                return Response({"message": "Logout successful"}, status=200)
-            return Response({"error": "No refresh token provided"}, status=400)
-        except Exception as e:
-            return Response({"error": str(e)}, status=400)
-
->>>>>>> c10156f6bfc1505e8535eeb60382a46027df7d80
 
     def post(self, request):
         try:
