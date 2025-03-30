@@ -1,5 +1,5 @@
 
-STOCK APPLICATION WEB-APP
+STOCK TRADING WEB-APP
 
 A scalable stock trading platform catering to registered users that provides comprehensive information about publicly listed stocks in the US, allows users to make deposits, purchase, sell and trade stocks with leverage seamlessly and securely through the integration of an authenticator for in-app transactions and third-party APIs, namely Tiingo for market data and Braintree for secure payment(deposit) processing. API Endpoints were also created to allow for CRUD operations.
 
@@ -20,7 +20,7 @@ Go to the project directory
 Install dependencies
 
 ```bash
-  pip install -r requirements.txt
+  pip install -r Requirements.txt
 ```
 
 Start the server
@@ -41,7 +41,7 @@ Start the server
 
 ## Environment Variables
 
-To run this project, you will need to add the following environment variables to your .env or settings.py file
+To run this project, you will need to add the following environment variables to your .env file
 
 
 BRAINTREE_MERCHANT_ID = '' 
@@ -52,3 +52,5 @@ BRAINTREE_TOKENIZATION_KEY = ''
 CELERY_BROKER_URL = ''
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
+
+NOTE: I used RabbitMQ as my Celery broker

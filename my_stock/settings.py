@@ -37,7 +37,6 @@ LOGOUT_URL = 'logout'
 
 
 
-
 BRAINTREE_CONF = braintree.Configuration(
     braintree.Environment.Sandbox,
     BRAINTREE_MERCHANT_ID,
