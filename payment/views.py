@@ -138,7 +138,6 @@ def stock_buy(request):
 @login_required        
 def stock_sell(request):
     form = SellForm(request.POST)
-    sign = False
     
     #GETS THE USER'S DATA
     user = request.user
