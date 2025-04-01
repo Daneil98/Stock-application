@@ -57,16 +57,23 @@ Start the server
 To run this project, you will need to add the following environment variables to your .env file
 
 
-SECRET_KEY = ''
-DEBUG = '' (False for Production)
-TIINGO_TOKEN = ''
-DATABASE_URL = ''
-BRAINTREE_MERCHANT_ID = '' 
-BRAINTREE_PUBLIC_KEY = ''   
-BRAINTREE_PRIVATE_KEY = ''
-BRAINTREE_TOKENIZATION_KEY = ''
+SECRET_KEY = ' '
 
-CELERY_BROKER_URL = ''
+DEBUG = ' ' (False for Production)
+
+TIINGO_TOKEN = ' '
+
+DATABASE_URL = ' '
+
+BRAINTREE_MERCHANT_ID = ' ' 
+
+BRAINTREE_PUBLIC_KEY = ' '   
+
+BRAINTREE_PRIVATE_KEY = ' '
+
+BRAINTREE_TOKENIZATION_KEY = ' '
+
+CELERY_BROKER_URL = ' '
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 
