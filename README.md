@@ -1,5 +1,5 @@
 
-STOCK TRADING WEB-APP
+STOCK TRADING WEB-APP available at https://stock-application.onrender.com
 
 A scalable stock trading platform catering to registered users that provides comprehensive information about publicly listed stocks in the US, allows users to make deposits, purchase, sell and trade stocks with leverage seamlessly and securely through the integration of an authenticator for in-app transactions and third-party APIs, namely Tiingo for market data and Braintree for secure payment(deposit) processing. API Endpoints were also created to allow for CRUD operations.
 
@@ -23,6 +23,19 @@ Install dependencies
   pip install -r Requirements.txt
 ```
 
+
+Prepare for migrations
+```bash
+  python manage.py makemigrations
+```
+
+
+Run Migration
+```bash
+  python manage.py migrate
+```
+
+
 Start the server
 
 ```bash
@@ -44,6 +57,10 @@ Start the server
 To run this project, you will need to add the following environment variables to your .env file
 
 
+SECRET_KEY = ''
+DEBUG = '' (False for Production)
+TIINGO_TOKEN = ''
+DATABASE_URL = ''
 BRAINTREE_MERCHANT_ID = '' 
 BRAINTREE_PUBLIC_KEY = ''   
 BRAINTREE_PRIVATE_KEY = ''
