@@ -57,7 +57,12 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DEBUG", "False").lower() == "true"
 
-ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS").split(" ")
+ALLOWED_HOSTS = [
+    'stock-application.onrender.com',  # Your Render domain
+    'localhost',                       # For local testing
+    '127.0.0.1',                      # For local requests
+    '0.0.0.0'                         # For Docker/Render health checks
+]
 
 
 SIMPLE_JWT = {
