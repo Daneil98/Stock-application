@@ -2,7 +2,7 @@
 set -o errexit  # Exit on error
 
 echo "=== Installing dependencies ==="
-pip install -r requirements.txt
+pip install -r Requirement.txt
 
 echo "=== Collecting static files ==="
 python manage.py collectstatic --noinput  # Critical for static files
