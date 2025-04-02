@@ -149,9 +149,9 @@ def stock(request):
 
 
 @login_required
-@csrf_exempt
+@csrf_protect
 def ticker(request, **ticker):  
-    ticker = request.POST['ticker']
+    ticker = request.POST.get('ticker')
     prize = {'type': get_price(ticker)}
     price = (prize["type"])                         #Sets price as a dictionary with prize and type as key-value pair
     close_price = price['close']                    # Extracts the "close" value
