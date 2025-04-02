@@ -21,7 +21,7 @@ from account import views
 from django.contrib.auth import views as auth_views
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('back/', admin.site.urls),
     path('account/', include('account.urls')),
     path('payment/', include('payment.urls')),  
     path('ticker/', views.ticker, name='ticker'),
