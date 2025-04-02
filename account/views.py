@@ -1,8 +1,9 @@
 from django.views.decorators.csrf import csrf_exempt
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_protect
 from django.shortcuts import get_object_or_404
 from .models import Profile, price_db
 from .forms import *
@@ -13,7 +14,6 @@ import pyotp
 
 
 # Create your views here.
-
 
 
 #BASIC VIEWS
@@ -149,23 +149,47 @@ def stock(request):
 
 
 @login_required
-@csrf_protect
-def ticker(request, **ticker):  
-    ticker = request.POST.get('ticker')
-    prize = {'type': get_price(ticker)}
-    price = (prize["type"])                         #Sets price as a dictionary with prize and type as key-value pair
-    close_price = price['close']                    # Extracts the "close" value
-    open_price = price['open']                      # Extracts the "open" value
+@csrf_protect  # Prefer this over csrf_exempt
+def ticker(request):
+    if request.method != 'POST':
+        return redirect('account:stocks')  # Or handle GET requests differently
     
-    name = {'typ': get_meta_data(ticker)}
-    meta = (name['typ'])
-    stock_name = meta['name']
+    ticker_symbol = request.POST.get('ticker')
+    if not ticker_symbol:
+        messages.error(request, "No ticker symbol provided.")
+        return redirect('account:stocks')
     
-    user_name = request.user.username                     #Request user
-    price_db.objects.create(user = user_name, closeprice = close_price, 
-        openprice = open_price, name = stock_name, ticker = ticker)
+    try:
+        # Fetch data (add error handling for external API failures)
+        price_data = get_price(ticker_symbol)
+        meta_data = get_meta_data(ticker_symbol)
+        
+        # Validate required keys exist
+        close_price = price_data.get('close')
+        open_price = price_data.get('open')
+        stock_name = meta_data.get('name')
+        
+        if None in (close_price, open_price, stock_name):
+            raise ValueError("Missing required data fields")
+        
+        # Save to database
+        price_db.objects.create(
+            user=request.user.username,
+            closeprice=close_price,
+            openprice=open_price,
+            name=stock_name,
+            ticker=ticker_symbol
+        )
+        
+        return render(request, 'account/ticker.html', {
+            'ticker': ticker_symbol,
+            'meta': meta_data,
+            'price': price_data
+        })
     
-    return render(request, 'account/ticker.html', {'ticker': ticker, 'meta': get_meta_data(ticker), 'price': get_price(ticker)})
+    except Exception as e:
+        messages.error(request, f"Error processing ticker: {str(e)}")
+        return redirect('account:stocks')
 
 
 
