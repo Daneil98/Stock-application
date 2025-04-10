@@ -115,6 +115,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'my_stock.middleware.BlockBotsMiddleware',
 ]
 
 ROOT_URLCONF = 'my_stock.urls'
