@@ -92,7 +92,7 @@ class Trading():
         if amount <= 0:
             raise ValueError("Amount must be positive and greater than zero.")
         
-        spread = (long_price - current_price) / current_price                         #When going long, we make profit when the current price is greater than the long price
+        spread = (current_price - long_price) / current_price                         #When going long, we make profit when the current price is greater than the long price
         returns = spread * self._leverage * amount
         return returns
         
