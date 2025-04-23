@@ -106,9 +106,9 @@ def stock_buy(request):
 #    sign = True                                     # Helps determine what kind of operation is ongoing
     
     #GETS THE USER'S DATA
-    user = request.user
-    profile = get_object_or_404(Profile, user=user)
-    name = user.username
+    user1 = request.user
+    profile = get_object_or_404(Profile, user=user1)
+    name = user1.username
     totp = pyotp.TOTP(profile.secret_key)
     
     # PRICE FETCHING
@@ -138,7 +138,7 @@ def stock_buy(request):
             shares_bought = float(sum_price / prices)
             
             if totp.verify(otp):
-                if not Stock_Wallet.objects.filter(user=name).exists():
+                if not Stock_Wallet.objects.filter(user=name, name=stock_name).exists():
                     shares =  0   
                     stock_equity = 0
                     
@@ -158,15 +158,16 @@ def stock_buy(request):
                     shares =  StockWallet_instance.shares               #stocks shares present before current transaction 
                     StockWallet_instance.shares = StockHoldingTransaction_instance.buy_shares(shares, shares_bought)            #Calculate the number of shares added and update it 
                     StockWallet_instance.equity = StockHoldingTransaction_instance.buy_stock_eq_update(sum_price)               #Calculate the amount of stock equity added and update it 
-                    StockWallet_instance.save(commit=False)
+                    
                     
                     
                 WalletTransaction_instance = WalletTransaction(amount1, amount3)
+                
                 Wallet_instance = Wallet.objects.filter(user=name).last()
                 Wallet_instance.user = name
                 Wallet_instance.balance = WalletTransaction_instance.buy_balance_update(sum_price)      
                 Wallet_instance.stock_eq = WalletTransaction_instance.buy_stock_eq_update(sum_price)    
-                Wallet_instance.save(commit=False)
+                
                 
                 Buy.objects.create(user = name, name = stock_name, bought = True, stock_purchase_price = amount2, total_purchase_amount = sum_price, 
                                    shares = shares_bought)            
@@ -224,27 +225,32 @@ def stock_sell(request):
                 
                 shares_left = float(amount2/stock_price)                                    #Calculates the number of shares to be sold
                 
-                if totp.verify(otp):
-                    StockWallet_instance = Stock_Wallet.objects.get(name=stock_name)        #Retrieve stock wallet entry/instance by it's stock name
+                if totp.verify(otp): 
                     stock_equity = StockWallet_instance.equity
 
+                    
                     StockHoldingTransaction_instance = StockHolding(amount1, stock_equity)
+                    
+                    
                     StockWallet_instance.user = name
                     StockWallet_instance.name = stock_name
                     StockWallet_instance.shares = StockHoldingTransaction_instance.sell_shares(shares_left, StockWallet_instance.shares)               #Calculate the number of shares sold and update it 
                     StockWallet_instance.equity = StockHoldingTransaction_instance.sell_stock_eq_update(amount2)                        #Calculate the amount of stock equity sold and update it 
-                    StockWallet_instance.save(commit=False)
+                    
                         
                     
                     WalletTransaction_instance = WalletTransaction(amount1, amount3)
-                    Wallet_instance = Wallet.objects.filter(user=name).last()
+                    
+                    
+                    Wallet_instance = Wallet.objects.filter(user=user_name).last()
                     Wallet_instance.user = name
                     Wallet_instance.stock_eq = WalletTransaction_instance.sell_stock_eq_update(amount2)
                     Wallet_instance.balance = WalletTransaction_instance.sell_balance_update(amount2)
-                    Wallet_instance.save(commit=False)     #Updates the user's wallet
+                    
 
                     Sell.objects.create(user = name, name = stock_name, sold = True, total_selling_amount = amount2,
-                        stock_selling_price = stock_price, shares = shares_left)
+                        stock_selling_price = stock_price, shares = shares_left)    #Creates the sell transaction record
+                    
                     
                     StockWallet_instance.save()
                     Wallet_instance.save()
@@ -358,3 +364,5 @@ def short_position(request):
                 return redirect('payment:canceled')
         
     return render(request, 'stock_short.html', {'Sell': Sell, 'form': form,  'total': balances.balance, 'prices': open_price, 'stock': stock_name })
+
+
