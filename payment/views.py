@@ -149,7 +149,7 @@ def stock_buy(request):
                     )
                      
                 else:
-                    StockWallet_instance = Stock_Wallet.objects.get(name=stock_name)
+                    StockWallet_instance = Stock_Wallet.objects.get(user=name, name=stock_name)
                     stock_equity = StockWallet_instance.equity
                     StockHoldingTransaction_instance = StockHolding(amount1, stock_equity)
                     #StockWallet_instance.ticker = ticker
