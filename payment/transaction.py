@@ -1,13 +1,15 @@
+from dataclasses import dataclass, field
 
-class WalletTransaction():
-    def __init__(self, balance, stock_eq):
-        self.balance = balance
-        self.stock_eq = stock_eq
+@dataclass 
+class WalletTransaction:
+    __slots__ = ("balance", "stock_eq")  
+    balance: float
+    stock_eq: float
         
     def buy_stock_eq_update(self, totalamount):                     #This function updates the stock equities after a buy transaction
         self.stock_eq += totalamount
         return self.stock_eq   
-     
+    
     def sell_stock_eq_update(self, totalamount):                    #This function updates the stock equities after a sell transaction
         self.stock_eq -= totalamount
         return self.stock_eq    
@@ -20,8 +22,10 @@ class WalletTransaction():
         self.balance += totalamount
         return self.balance 
  
- 
+
+@dataclass
 class StockHolding(WalletTransaction):
+    __slots__ = ("balance", "stock_eq")  # Extends parent slots
     def __init__(self, balance, stock_eq):
         super().__init__(balance, stock_eq, )
     
@@ -34,11 +38,13 @@ class StockHolding(WalletTransaction):
         shares -= shares1 
         return shares
      
-    
-class BuyTransaction():
-    def __init__(self, balance, shares=0.0):
-        self.balance = balance
-        self.shares = shares
+
+@dataclass   
+class BuyTransaction:
+    __slots__ = ("balance", "shares")  
+    balance : float
+    shares : float
+
         
     def share_number(self, total_purchase_price, price):                  #This function calculates the number of shares bought
         numbers = total_purchase_price / price
@@ -56,12 +62,14 @@ class BuyTransaction():
             print("Sufficient Funds")
             return self.balance
   
-                
-class SellTransaction():
-    def __init__(self, balance, shares=0.0):
-        self.balance = balance
-        self.shares = shares
-    
+  
+@dataclass               
+class SellTransaction:
+    __slots__ = ("_balance", "_shares")  # Private slot names
+    balance: float 
+    shares: float 
+
+
     def share_number(self, sell_amount, price):                  #This function calculates the number of shares to be sold
         numbers = sell_amount / price
         
@@ -78,11 +86,11 @@ class SellTransaction():
             eq -= sell_amount
             return eq
         
-        
-class Trading():
-    def __init__(self, balance, leverage):
-        self._balance = balance
-        self._leverage = leverage
+@dataclass      
+class Trading:
+    __slots__ = ("_balance", "_leverage")  
+    _balance : float
+    _leverage : int
       
         
     def long_position(self, amount, long_price, current_price):
@@ -106,9 +114,10 @@ class Trading():
         
         spread = (short_price - current_price) / short_price                   #When going short, we make profit when the current price is less than the short price
         returns = spread * self._leverage * amount
-        return returns    
+        return returns   
         
     def close_position(self, returns):
         self._balance += returns
         return self._balance
+    
     
