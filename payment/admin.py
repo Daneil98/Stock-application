@@ -30,8 +30,8 @@ class Stock_WallettAdmin(admin.ModelAdmin):
     
 @admin.register(Long)
 class LongAdmin(admin.ModelAdmin):
-    list_display = ['user', 'name', 'ticker', 'amount', 'leverage','long_price', 'current_price', 'returns', 'open']
+    list_display = ['user', 'name', 'ticker', 'amount', 'leverage','long_price', 'current_price', 'returns', 'is_open']
 
 @admin.register(Short)
 class ShortAdmin(admin.ModelAdmin):
-    list_display = ['user', 'name', 'ticker', 'amount', 'leverage','short_price', 'current_price', 'returns', 'open']
+    list_display = ['user', 'name', 'ticker', 'amount', 'leverage','short_price', 'current_price', 'returns', 'is_open']
