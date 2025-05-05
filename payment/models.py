@@ -3,7 +3,7 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.validators import MaxValueValidator
 from django.core.exceptions import ValidationError
-from .cache_utils import *
+
 
 # Create your models here.
 
@@ -61,9 +61,6 @@ class Wallet(models.Model):
     balance = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     stock_eq = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     
-    @classmethod
-    def get_for_user(cls, user_id):
-        return get_cached_wallet(user_id)
 
 
 class Stock_Wallet(models.Model):
