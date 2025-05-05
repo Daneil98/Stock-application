@@ -8,4 +8,5 @@ echo "=== Collecting static files ==="
 python manage.py collectstatic --noinput  # Critical for static files
 
 echo "=== Applying database migrations ==="
+python manage.py makemigrations --noinput
 python manage.py migrate --noinput
