@@ -100,8 +100,6 @@ def stock_buy(request):
     form = BuyForm(request.POST)
 #    sign = True                                     # Helps determine what kind of operation is ongoing
     
-    
-    
     #GETS THE USER'S DATA
     user1 = request.user
     profile = get_object_or_404(Profile, user=user1)
@@ -294,20 +292,18 @@ def long_position(request):
             Amount.user = request.user.username
             Amount.save()
 
-            sum_price = float(Amount.total_price)                                   # amount user wants to trade
+            sum_price = Amount.total_price                                   # amount user wants to trade
             otp = Amount.otp                                                        # otp code
-            leverage_used = int(Amount.leverage)                                              # Leverage used          
+            leverage_used = Amount.leverage                                              # Leverage used          
             
             #Instance declaration
             #Trading_instance = Trading(amount1, leverage_used)
             cTradingInstance = trading_cpp.Trading(amount1, leverage_used)
-            WalletTransaction_instance = cTradingInstance
-            
             
             if totp.verify(otp):
                 Long.objects.create(user = user_name, name = stock_name, ticker = ticker, amount = sum_price, 
                     leverage = leverage_used, current_price = close_price, long_price = open_price, 
-                    returns = cTradingInstance.long_position(sum_price, open_price, close_price))
+                    returns = cTradingInstance.calculateLongReturn(sum_price, open_price, close_price))
 
                 balances.balance -= sum_price
                 balances.save()
@@ -349,18 +345,17 @@ def short_position(request):
             Amount.user = request.user.username
             Amount.save()
             
-            sum_price = float(Amount.total_price)                                   # amount user wants to trade
+            sum_price = Amount.total_price                                   # amount user wants to trade
             otp = Amount.otp                                                        # otp code
-            leverage_used = int(Amount.leverage)                                              # Leverage used          
+            leverage_used = Amount.leverage                                              # Leverage used          
             
             #Trading_instance = Trading(amount1, leverage_used)
             cTradingInstance = trading_cpp.Trading(amount1, leverage_used)
-            WalletTransaction_instance = cTradingInstance
             
             if totp.verify(otp):
                 Short.objects.create(user = user_name, name = stock_name, amount = sum_price, ticker = ticker, 
                     leverage = leverage_used, current_price = close_price, short_price = open_price, 
-                    returns = cTradingInstance.short_position(sum_price, open_price, close_price))
+                    returns = cTradingInstance.calculateShortReturn(sum_price, open_price, close_price))
                 
                 balances.balance -= sum_price
                 balances.save()
