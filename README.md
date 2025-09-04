@@ -33,7 +33,7 @@ Start the server
 ## Features
 
 - User Authentication: Sign-up, login, and logout functionality with secure password storage.
-- Trade: You can buy, sell, short and long US stocks easily.
+- Trade: You can buy, sell and trade (short and long) US stocks with leverage easily.
 - Stock search and information: Search for the desired US stock and get information on it alongside options to trade.
 - Blog: Read articles about the lastest events in the stock market and comment your opinions about the topics.
 - Real Time updates: Depending on your Tiingo subscription plan, you can gain access to realtime updates of the US stock market
@@ -43,6 +43,7 @@ Start the server
 
 To run this project, you will need to add the following environment variables to your .env file
 
+TIINGO_TOKEN = '' 
 
 BRAINTREE_MERCHANT_ID = '' 
 BRAINTREE_PUBLIC_KEY = ''   

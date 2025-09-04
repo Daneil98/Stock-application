@@ -12,14 +12,15 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 import os
 import braintree
-import dj_database_url
 from datetime import timedelta
 
 
-BRAINTREE_MERCHANT_ID = os.environ.get("BRAINTREE_MERCHANT_ID")
-BRAINTREE_PUBLIC_KEY =  os.environ.get("BRAINTREE_PUBLIC_KEY")
-BRAINTREE_PRIVATE_KEY = os.environ.get("BRAINTREE_PRIVATE_KEY")
-BRAINTREE_TOKENIZATION_KEY = os.environ.get("BRAINTREE_TOKENIZATION_KEY")
+TF_ENABLE_ONEDNN_OPTS=0
+BRAINTREE_MERCHANT_ID = 'qnk7x4t299nm2wdy' 
+BRAINTREE_PUBLIC_KEY = 'v5ppwdkbcncbbdjc'   
+BRAINTREE_PRIVATE_KEY = 'aa7a80a4504187bbfa820b3f413174c8'
+BRAINTREE_TOKENIZATION_KEY = 'sandbox_rz4k7rvw_qnk7x4t299nm2wdy'
+
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -33,7 +34,7 @@ STATIC_DIR = os.path.join(BASE_DIR, "static")
 LOGIN_REDIRECT_URL = 'dashboard'
 LOGOUT_REDIRECT_URL = 'index'
 LOGIN_URL = 'login'
-LOGOUT_URL = 'logout'
+LOGOUT_URL = 'logged_out'
 
 
 
@@ -45,20 +46,18 @@ BRAINTREE_CONF = braintree.Configuration(
 )
 
 
-CELERY_BROKER_URL = os.environ.get("CELERY_BROKER_URL")
+CELERY_BROKER_URL = 'amqp://guest:guest@localhost:5672/'
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 
 
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get("SECRET_KEY")
+SECRET_KEY = 'bd&p_i@jaq&@7kt7)dd)j!3vdr4z)ij&n1z409j*69i&!ll3$v'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get("DEBUG", "False").lower() == "true"
-
-ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS").split(" ")
-
+DEBUG = True
+ALLOWED_HOSTS = ['127.0.0.1']
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),
@@ -109,6 +108,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'my_stock.middleware.BlockBotsMiddleware',
 ]
 
 ROOT_URLCONF = 'my_stock.urls'
@@ -132,22 +132,18 @@ TEMPLATES = [
 WSGI_APPLICATION = 'my_stock.wsgi.application'
 
 
+
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-if not DEBUG:
-    DATABASES = {
-	"default": dj_database_url.parse(os.environ.get("DATABASE_URL"))
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
 }
 
-else:
-
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
-        }
-    }
 
 
 # Password validation
@@ -194,7 +190,7 @@ STATIC_URL = '/static/'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticStorage"
+#STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticStorage"
 
 MEDIA_URL = '/media/'
 

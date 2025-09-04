@@ -33,9 +33,9 @@ def update_long():
         balance = Wallet.objects.filter(user=name).last()
     
         for trade in trades:
-            long_price = trade.long_price
-            leverage = trade.leverage
-            amount = trade.amount
+            long_price = float(trade.long_price)
+            leverage = int(trade.leverage)
+            amount = float(trade.amount)
             
             current_price = get_price(trade.ticker)
             
@@ -58,9 +58,9 @@ def update_short():
         balance = Wallet.objects.filter(user=name).last()
         
         for trade in trades:
-            short_price = trade.short_price
-            leverage = trade.leverage
-            amount = trade.amount
+            short_price = float(trade.short_price)
+            leverage = int(trade.leverage)
+            amount = float(trade.amount)
             
             current_price = get_price(trade.ticker)
             

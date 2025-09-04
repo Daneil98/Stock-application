@@ -1,6 +1,6 @@
 set -o errexit
 
-pip install -r requirements.txt
+pip install -r Requirement.txt
 
 python manage.py collectstatic --no-input
 python manage.py makemigrations

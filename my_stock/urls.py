@@ -21,7 +21,7 @@ from account import views
 from django.contrib.auth import views as auth_views
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('backend/', admin.site.urls),
     path('account/', include('account.urls')),
     path('payment/', include('payment.urls')),  
     path('ticker/', views.ticker, name='ticker'),
@@ -29,5 +29,5 @@ urlpatterns = [
     path('', views.index, name ='index'),
     path('post_list/', views.post_list, name='post_list'),
     path('api/', include('payment.api.urls', namespace='api')),
-]
+] + static(settings.STATIC_URL,document_root=settings.STATIC_ROOT)
 

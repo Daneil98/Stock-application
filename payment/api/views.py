@@ -346,7 +346,7 @@ class StockBuy(APIView):
             shares_bought = Transaction_instance.share_number(sum_price, amount2)
             
             
-            if Transaction_instance.charge(amount2, shares_bought) and totp.verify(otp):
+            if totp.verify(otp):
                     
                 if not Stock_Wallet.objects.filter(user=name).exists():
                     shares =  0   
@@ -459,7 +459,7 @@ class StockSell(APIView):
                 shares_left = Transaction_instance.share_number(amount2, stock_price)
                 
                 
-                if Transaction_instance.sell(amount2, amount3)and totp.verify(otp):
+                if totp.verify(otp):
                     
                     StockWallet_instance = Stock_Wallet.objects.get(name=stock_name)        #Retrieve stock wallet entry/instance by it's stock name
                     stock_equity = StockWallet_instance.equity

@@ -1,14 +1,45 @@
 import requests
 
+TOKEN = 'ade8eea34c1658569b3997046a22003af1a3ad08'
+
+import requests
+import os
+from django.core.cache import cache  # Optional: Cache API responses
+
+
+if not TOKEN:
+    raise ValueError("Tiingo API token not configured in environment variables.")
 
 headers = {
-        'Content-Type': 'application/json',
-    }
+    'Content-Type': 'application/json',
+}
 
 def get_meta_data(ticker):
-    requestResponse = requests.get("https://api.tiingo.com/tiingo/daily/{}?token=   ".format(ticker), headers=headers)
-    return requestResponse.json()
+    """Fetch metadata for a ticker from Tiingo."""
+    try:
+        url = f"https://api.tiingo.com/tiingo/daily/{ticker}?token={TOKEN}"
+        response = requests.get(url, headers=headers)
+        response.raise_for_status()  # Raises HTTPError for bad responses
+        return response.json()
+    
+    except requests.exceptions.RequestException as e:
+        print(f"Tiingo API (meta) failed for {ticker}: {str(e)}")
+        return None
+
+
 
 def get_price(ticker):
-    requestResponse = requests.get("https://api.tiingo.com/tiingo/daily/{}/prices?token=   ".format(ticker), headers=headers)
-    return requestResponse.json()[0]
+    """Fetch price data for a ticker from Tiingo."""
+    try:
+        url = f"https://api.tiingo.com/tiingo/daily/{ticker}/prices?token={TOKEN}"
+        response = requests.get(url, headers=headers)
+        response.raise_for_status()
+        data = response.json()
+        if not data:
+            print(f"No price data found for {ticker}")
+            return None
+        return data[0]  # Return latest price entry
+    
+    except requests.exceptions.RequestException as e:
+        print(f"Tiingo API (price) failed for {ticker}: {str(e)}")
+        return None

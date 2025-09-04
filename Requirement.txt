@@ -1,4 +1,4 @@
-Django==5.1.6
+Django
 djangorestframework==3.14.0
 django_taggit==6.1.0
 dj_database_url==2.3.0
@@ -20,3 +20,6 @@ yarl==1.18.3
 gunicorn==23.0.0
 django-environ==0.11.2
 tzdata==2025.1
+datasets==3.5.0
+cmake==4.1.0
+pybind11

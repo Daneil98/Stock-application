@@ -4,8 +4,8 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.generic import ListView
 from .forms import EmailPostForm
 from django.core.mail import send_mail
-from .models import Post, Comment
-from .forms import EmailPostForm, CommentForm
+from .models import *
+from .forms import *
 from taggit.models import Tag
 from django.db.models import Count
 
@@ -15,7 +15,27 @@ from django.db.models import Count
 
 
 def index(request):
-    return render(request, 'index.html')   
+    return render(request, 'index.html')  
+
+
+"""
+def post(request):
+    form = PostForm(data=request.POST)
+    if request.method == 'POST':
+        form = PostForm(data=request.POST)
+        if form.is_valid():
+            # Create Comment object but don't save to database yet
+            new_post = form.save(commit=False)
+            # Assign the current post to the post
+            new_post.post = post
+            # Save the post to the database
+            new_post.save()
+        else:
+            form = PostForm()
+        
+    return render(request, 'blog/post.html', {'post': post,})   
+
+"""
 
 def post_detail(request, year, month, day, post):
     post = get_object_or_404(Post, slug=post, status='published', publish__year=year, publish__month=month, publish__day=day)

@@ -46,3 +46,13 @@ class TickerForm(forms.Form):
     ticker = forms.CharField(label='Ticker', max_length=10)
     
 
+
+class CloseTradeButton(forms.Form):
+    confirm = forms.BooleanField(
+        label="I confirm I want to close this trade",
+        required=True,  # Force explicit user confirmation
+        widget=forms.CheckboxInput(attrs={
+            'class': 'form-check-input',
+            'hx-post': '/close_trade/',  # Example: HTMX integration
+        })
+    )

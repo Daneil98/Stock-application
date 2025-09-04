@@ -1,19 +1,27 @@
 from django.views.decorators.csrf import csrf_exempt
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
-from .models import Profile, price_db
+from .models import *
 from .forms import *
 from django.contrib import messages
 from .tiingo import get_meta_data, get_price
 from payment.models import Wallet, Payment, Stock_Wallet, Long, Short
 import pyotp
+from payment.models import *
+from django.core.cache import caches
+
+
+#from django_ratelimit.decorators import ratelimit
+
+#@ratelimit(key='ip', rate='5/m')  # 5 requests per minute
 
 
 # Create your views here.
 
+#finbert = pipeline('text-classification', model='yiyanghkust/finbert-tone')
 
 
 #BASIC VIEWS
@@ -148,6 +156,7 @@ def stock(request):
     return render(request, 'account/stock.html', {'form': form})
 
 
+
 @login_required
 @csrf_exempt
 def ticker(request, **ticker):  
@@ -162,12 +171,62 @@ def ticker(request, **ticker):
     stock_name = meta['name']
     
     user_name = request.user.username                     #Request user
+    
     price_db.objects.create(user = user_name, closeprice = close_price, 
         openprice = open_price, name = stock_name, ticker = ticker)
     
     return render(request, 'account/ticker.html', {'ticker': ticker, 'meta': get_meta_data(ticker), 'price': get_price(ticker)})
 
+def close_short_position(request):
+    form = CloseTradeButton(request.POST)
+    
+    user = request.user
+    profile = get_object_or_404(Profile, user=user)
+    user_name = user.username
+    
+    def get(self, request, trade_id):
+        # Pre-fill the form with the trade to close
+        trade = Short.objects.get(id=trade_id, user=request.user)
+        form = CloseTradeButton(initial={'trade_id': trade})
+        return render(request, 'account/my_stocks.html', {'form': form, 'trade': trade})
 
+    def post(self, request, trade_id):
+        trade = Short.objects.get(id=trade_id, user=request.user)
+        wallet = Wallet.objects.filter(user=user_name).last()
+        form = CloseTradeButton(request.POST)
+
+        if form.is_valid():
+            if form.cleaned_data['confirm']:  # Checkbox confirmed
+                trade.close()  # Your model method to close the trade
+                wallet.balance += trade.returns
+                wallet.save() 
+                messages.success(request, f"Trade #{trade.id} closed successfully.")
+                return redirect(request.META.get('HTTP_REFERER', '/'))          #Redirects back to the same page (refresh)
+            else:
+                messages.error(request, "You must confirm the closure.")
+        else:
+            messages.error(request, "Invalid form submission.")
+
+#FINGPT
+
+"""
+def analyze_sentiment(request):
+    if request.method == 'POST':
+        text = request.POST.get('text')
+        symbol = request.POST.get('symbol')
+        
+        # Get sentiment
+        result = finbert(text)
+        
+        # Store in database
+        FinancialData.objects.create(
+            symbol=symbol,
+            news_text=text,
+            sentiment_score=float(result[0]['score']) if result[0]['label'] == 'Positive' else -float(result[0]['score'])
+        )
+        
+        return render(request, 'account/stock_analysis.html', {'status': 'success', 'sentiment': result})
+"""
 
 #BLOG VIEW
 def post_list(request, tag_slug=None):

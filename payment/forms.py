@@ -42,3 +42,5 @@ class ShortForm(forms.ModelForm):
     class Meta:
         model = amount
         fields = ('total_price', 'leverage', 'otp')   
+        
+        
