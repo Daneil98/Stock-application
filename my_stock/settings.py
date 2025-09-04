@@ -46,17 +46,17 @@ BRAINTREE_CONF = braintree.Configuration(
 )
 
 
-CELERY_BROKER_URL = 'amqp://guest:guest@localhost:5672/'
+CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL')
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 
 
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'bd&p_i@jaq&@7kt7)dd)j!3vdr4z)ij&n1z409j*69i&!ll3$v'
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 ALLOWED_HOSTS = ['127.0.0.1', 'stock-application.onrender.com']
 
 SIMPLE_JWT = {
