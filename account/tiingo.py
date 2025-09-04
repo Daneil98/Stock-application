@@ -1,6 +1,7 @@
 import requests
+import os
 
-TOKEN = 'ade8eea34c1658569b3997046a22003af1a3ad08'
+TOKEN = os.getenv('TIINGO_TOKEN')
 
 import requests
 import os
