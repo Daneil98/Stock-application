@@ -1,0 +1,10 @@
+^C:\USERS\SAMSUNG\DESKTOP\VS\STOCK-APPLICATION-MASTER\BUILD\_DEPS\PYBIND11-SUBBUILD\CMAKEFILES\6F77CB532F7AA724CCD0FAF8CFB85A0E\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/samsung/Desktop/VS/Stock-application-master/build/_deps/pybind11-subbuild -BC:/Users/samsung/Desktop/VS/Stock-application-master/build/_deps/pybind11-subbuild --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file C:/Users/samsung/Desktop/VS/Stock-application-master/build/_deps/pybind11-subbuild/pybind11-populate.sln
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

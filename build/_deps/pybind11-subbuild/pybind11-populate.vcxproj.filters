@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\samsung\Desktop\VS\Stock-application-master\build\_deps\pybind11-subbuild\CMakeFiles\326430d427c343a5308cedcfeb833125\pybind11-populate-mkdir.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\samsung\Desktop\VS\Stock-application-master\build\_deps\pybind11-subbuild\CMakeFiles\326430d427c343a5308cedcfeb833125\pybind11-populate-download.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\samsung\Desktop\VS\Stock-application-master\build\_deps\pybind11-subbuild\CMakeFiles\326430d427c343a5308cedcfeb833125\pybind11-populate-update.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\samsung\Desktop\VS\Stock-application-master\build\_deps\pybind11-subbuild\CMakeFiles\326430d427c343a5308cedcfeb833125\pybind11-populate-patch.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\samsung\Desktop\VS\Stock-application-master\build\_deps\pybind11-subbuild\CMakeFiles\326430d427c343a5308cedcfeb833125\pybind11-populate-configure.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\samsung\Desktop\VS\Stock-application-master\build\_deps\pybind11-subbuild\CMakeFiles\326430d427c343a5308cedcfeb833125\pybind11-populate-build.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\samsung\Desktop\VS\Stock-application-master\build\_deps\pybind11-subbuild\CMakeFiles\326430d427c343a5308cedcfeb833125\pybind11-populate-install.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\samsung\Desktop\VS\Stock-application-master\build\_deps\pybind11-subbuild\CMakeFiles\326430d427c343a5308cedcfeb833125\pybind11-populate-test.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\samsung\Desktop\VS\Stock-application-master\build\_deps\pybind11-subbuild\CMakeFiles\125a150da7ebe882bb2c3ac4e63d402b\pybind11-populate-complete.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\samsung\Desktop\VS\Stock-application-master\build\_deps\pybind11-subbuild\CMakeFiles\6f77cb532f7aa724ccd0faf8cfb85a0e\pybind11-populate.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\samsung\Desktop\VS\Stock-application-master\build\_deps\pybind11-subbuild\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="C:\Users\samsung\Desktop\VS\Stock-application-master\build\_deps\pybind11-subbuild\CMakeFiles\pybind11-populate" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{AEC94929-F719-3F19-A693-DDAAA2A4773D}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

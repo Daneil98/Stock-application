@@ -1,0 +1,14 @@
+# Target labels
+ pybind11-populate
+# Source files and their labels
+C:/Users/samsung/Desktop/VS/Stock-application-master/build/_deps/pybind11-subbuild/CMakeFiles/pybind11-populate
+C:/Users/samsung/Desktop/VS/Stock-application-master/build/_deps/pybind11-subbuild/CMakeFiles/6f77cb532f7aa724ccd0faf8cfb85a0e/pybind11-populate.rule
+C:/Users/samsung/Desktop/VS/Stock-application-master/build/_deps/pybind11-subbuild/CMakeFiles/125a150da7ebe882bb2c3ac4e63d402b/pybind11-populate-complete.rule
+C:/Users/samsung/Desktop/VS/Stock-application-master/build/_deps/pybind11-subbuild/CMakeFiles/326430d427c343a5308cedcfeb833125/pybind11-populate-build.rule
+C:/Users/samsung/Desktop/VS/Stock-application-master/build/_deps/pybind11-subbuild/CMakeFiles/326430d427c343a5308cedcfeb833125/pybind11-populate-configure.rule
+C:/Users/samsung/Desktop/VS/Stock-application-master/build/_deps/pybind11-subbuild/CMakeFiles/326430d427c343a5308cedcfeb833125/pybind11-populate-download.rule
+C:/Users/samsung/Desktop/VS/Stock-application-master/build/_deps/pybind11-subbuild/CMakeFiles/326430d427c343a5308cedcfeb833125/pybind11-populate-install.rule
+C:/Users/samsung/Desktop/VS/Stock-application-master/build/_deps/pybind11-subbuild/CMakeFiles/326430d427c343a5308cedcfeb833125/pybind11-populate-mkdir.rule
+C:/Users/samsung/Desktop/VS/Stock-application-master/build/_deps/pybind11-subbuild/CMakeFiles/326430d427c343a5308cedcfeb833125/pybind11-populate-patch.rule
+C:/Users/samsung/Desktop/VS/Stock-application-master/build/_deps/pybind11-subbuild/CMakeFiles/326430d427c343a5308cedcfeb833125/pybind11-populate-test.rule
+C:/Users/samsung/Desktop/VS/Stock-application-master/build/_deps/pybind11-subbuild/CMakeFiles/326430d427c343a5308cedcfeb833125/pybind11-populate-update.rule
