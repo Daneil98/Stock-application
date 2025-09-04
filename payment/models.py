@@ -9,7 +9,7 @@ from django.core.exceptions import ValidationError
 
 class Payment(models.Model):
     user = models.CharField(max_length=200, null = True)
-    amount =models.DecimalField(max_digits=10, decimal_places=2, default=1000)
+    amount = models.DecimalField(max_digits=10, decimal_places=2, default=1000)
     description = models.TextField(max_length=150, blank= True)
     paid = models.BooleanField(default=False)
     braintree_id = models.CharField(max_length=150, null=True)
@@ -33,8 +33,8 @@ class Buy(models.Model):
 class Sell(models.Model):
     user = models.CharField(max_length=200, null = True)
     name = models.CharField(max_length=200, null = True)
-    total_selling_amount = models.FloatField(null = True)
-    stock_selling_price = models.FloatField(null = True)
+    total_selling_amount = models.DecimalField(null = True, decimal_places=2, max_digits=10)
+    stock_selling_price = models.DecimalField(null = True, decimal_places=2, max_digits=10)
     sold = models.BooleanField(default=False)
     shares = models.DecimalField(max_digits=10, decimal_places=2, null=True)
     
@@ -45,7 +45,7 @@ class Sell(models.Model):
     
 class amount(models.Model):
     user = models.CharField(max_length=200, blank=True, null=True)
-    total_price = models.FloatField(null=True)
+    total_price = models.DecimalField(null = True, decimal_places=2, max_digits=10)
     shares = models.FloatField(null=True)
     leverage = models.IntegerField(validators=[MaxValueValidator(10)], null=True, default=1)
     otp = models.IntegerField(null=True)
