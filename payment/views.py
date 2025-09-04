@@ -1,10 +1,9 @@
 import braintree
-from django.db.models import Sum
 from django.shortcuts import render, redirect, get_object_or_404
 from django.conf import settings
 from .forms import *
 from .models import *
-from .tasks import *
+#from .tasks import *
 from account.models import Profile, price_db
 from django.urls import reverse
 from payment.transaction import *
@@ -12,6 +11,9 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 import pyotp
 from django.http import JsonResponse
+from django.db import transaction as db_transaction
+from decimal import Decimal
+import trading_cpp            #Import C++ transaction logic
 
 
 # Create your views here.
@@ -57,18 +59,12 @@ def payment_process(request):
         # create and submit transaction
         if result and result.is_success:
 
-            if not Wallet.objects.filter(user=user_name).exists() and not Payment.objects.filter(user=user_name).exists():
+            if not Wallet.objects.filter(user=user_name).exists():
                 Wallet.objects.create(user = user_name, balance = amount, stock_eq = 0.00)
                 Payment.objects.create(user = user_name, amount = amount, paid = True, braintree_id = result.transaction.id)
             
             else:    
-                Payment_instance = Payment.objects.filter(user=user_name).last()
-                Payment_instance.user = user_name
-                Payment_instance.amount += amount
-                # mark the order as paid
-                Payment_instance.paid = True
-                # store the unique transaction id
-                Payment_instance.braintree_id = result.transaction.id
+                Payment.objects.create(user = user_name, amount = amount, paid = True, braintree_id = result.transaction.id)     
                 
                 
                 Wallet_instance = Wallet.objects.filter(user=user_name).last()
@@ -76,7 +72,6 @@ def payment_process(request):
                 Wallet_instance.user = user_name
                 
                 # save the payment
-                Payment_instance.save()
                 Wallet_instance.save()
                    
             
@@ -139,10 +134,12 @@ def stock_buy(request):
             
             if totp.verify(otp):
                 if not Stock_Wallet.objects.filter(user=name, name=stock_name).exists():
-                    shares =  0   
-                    stock_equity = 0
+                    shares =  0.0   
+                    stock_equity = 0.0
                     
-                    StockHoldingTransaction_instance = StockHolding(amount1, stock_equity)
+                    #StockHoldingTransaction_instance = StockHolding(amount1, stock_equity)
+                    cStockHolding = trading_cpp.StockHolding(amount1, stock_equity)
+                    StockHoldingTransaction_instance = cStockHolding 
                     Stock_Wallet.objects.create(user = name, name = stock_name,
                         shares = StockHoldingTransaction_instance.buy_shares(shares, shares_bought),            #Calculate the number of shares added and update it 
                         equity = StockHoldingTransaction_instance.buy_stock_eq_update(sum_price)               #Calculate the amount of stock equity added and update it 
@@ -151,8 +148,10 @@ def stock_buy(request):
                 else:
                     StockWallet_instance = Stock_Wallet.objects.get(user=name, name=stock_name)
                     stock_equity = StockWallet_instance.equity
-                    StockHoldingTransaction_instance = StockHolding(amount1, stock_equity)
+                    #StockHoldingTransaction_instance = StockHolding(amount1, stock_equity)
                     #StockWallet_instance.ticker = ticker
+                    cStockHolding = trading_cpp.StockHolding(amount1, stock_equity)
+                    StockHoldingTransaction_instance = cStockHolding
                     StockWallet_instance.user = name
                     StockWallet_instance.name = stock_name
                     shares =  StockWallet_instance.shares               #stocks shares present before current transaction 
@@ -161,8 +160,9 @@ def stock_buy(request):
                     
                     
                     
-                WalletTransaction_instance = WalletTransaction(amount1, amount3)
-                
+                #WalletTransaction_instance = WalletTransaction(amount1, amount3)
+                cWalletTransaction = trading_cpp.WalletTransaction(amount1, amount3)
+                WalletTransaction_instance = cWalletTransaction
                 Wallet_instance = Wallet.objects.filter(user=name).last()
                 Wallet_instance.user = name
                 Wallet_instance.balance = WalletTransaction_instance.buy_balance_update(sum_price)      
@@ -226,21 +226,20 @@ def stock_sell(request):
                 shares_left = float(amount2/stock_price)                                    #Calculates the number of shares to be sold
                 
                 if totp.verify(otp): 
-                    stock_equity = StockWallet_instance.equity
+                    stock_equity = float(StockWallet_instance.equity)
 
-                    
-                    StockHoldingTransaction_instance = StockHolding(amount1, stock_equity)
-                    
+                    cStockHolding = trading_cpp.StockHolding(amount1, stock_equity)
+                    StockHoldingTransaction_instance = cStockHolding 
                     
                     StockWallet_instance.user = name
                     StockWallet_instance.name = stock_name
                     StockWallet_instance.shares = StockHoldingTransaction_instance.sell_shares(shares_left, StockWallet_instance.shares)               #Calculate the number of shares sold and update it 
                     StockWallet_instance.equity = StockHoldingTransaction_instance.sell_stock_eq_update(amount2)                        #Calculate the amount of stock equity sold and update it 
                     
-                        
-                    
-                    WalletTransaction_instance = WalletTransaction(amount1, amount3)
-                    
+                                    
+                    #WalletTransaction_instance = WalletTransaction(amount1, amount3)
+                    cWalletTransaction = trading_cpp.WalletTransaction(amount1, amount3)
+                    WalletTransaction_instance = cWalletTransaction
                     
                     Wallet_instance = Wallet.objects.filter(user=user_name).last()
                     Wallet_instance.user = name
@@ -295,15 +294,16 @@ def long_position(request):
 
             sum_price = float(Amount.total_price)                                   # amount user wants to trade
             otp = Amount.otp                                                        # otp code
-            leverage_used = Amount.leverage                                              # Leverage used          
+            leverage_used = int(Amount.leverage)                                              # Leverage used          
             
             #Instance declaration
-            Trading_instance = Trading(amount1, leverage_used)
+            #Trading_instance = Trading(amount1, leverage_used)
+            cTradingInstance = trading_cpp.Trading(amount1, leverage_used)
             
             if totp.verify(otp):
                 Long.objects.create(user = user_name, name = stock_name, ticker = ticker, amount = sum_price, 
                     leverage = leverage_used, current_price = close_price, long_price = open_price, 
-                    returns = Trading_instance.long_position(sum_price, open_price, close_price))
+                    returns = cTradingInstance.long_position(sum_price, open_price, close_price))
 
                 balances.balance -= sum_price
                 balances.save()
@@ -347,13 +347,15 @@ def short_position(request):
             
             sum_price = float(Amount.total_price)                                   # amount user wants to trade
             otp = Amount.otp                                                        # otp code
-            leverage_used = Amount.leverage                                              # Leverage used          
-            Trading_instance = Trading(amount1, leverage_used)
+            leverage_used = int(Amount.leverage)                                              # Leverage used          
+            
+            #Trading_instance = Trading(amount1, leverage_used)
+            cTradingInstance = trading_cpp.Trading(amount1, leverage_used)
             
             if totp.verify(otp):
                 Short.objects.create(user = user_name, name = stock_name, amount = sum_price, ticker = ticker, 
                     leverage = leverage_used, current_price = close_price, short_price = open_price, 
-                    returns = Trading_instance.short_position(sum_price, open_price, close_price))
+                    returns = cTradingInstance.short_position(sum_price, open_price, close_price))
                 
                 balances.balance -= sum_price
                 balances.save()
