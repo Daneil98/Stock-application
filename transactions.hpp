@@ -19,13 +19,26 @@ class WalletTransaction{
 
         // Method to update stock_eq after buying
         double buy_stock_eq_update(double total_amount){
-            stock_eq += total_amount;
-            return stock_eq;
+            if (total_amount > balance){
+                cerr << "Insufficient funds";
+                return NULL;
+            }
+            else{
+                stock_eq += total_amount;
+                return stock_eq;
+            }
         }
 
         // Method to update stock_eq after selling
         double sell_stock_eq_update(double total_amount){
-            stock_eq -= total_amount;
+            if (total_amount > stock_eq){
+                cerr << "You do not have enough stock equity";
+                return NULL;
+            }
+            else{
+                stock_eq -= total_amount;
+                return stock_eq;
+            }
         }
         // Method to update the wallet balance after buying
         double buy_balance_update(double total_amount){
@@ -50,13 +63,25 @@ class StockHolding: public WalletTransaction{
             : WalletTransaction(balance, stock_eq) {}
 
         double buy_shares(double shares, double bought_shares){
-            shares += bought_shares;
-            return shares;
+            if (bought_shares < 0.1){
+                cerr << "Transaction size is too small";
+                return NULL;
+            }
+            else{
+                shares += bought_shares;
+                return shares;
+            }
         }
 
         double sell_shares(double shares, double sold_shares){
-            shares -= sold_shares;
-            return shares;
+            if (sold_shares < 0.1){
+                cerr << "Transaction size is too small";
+                return NULL;
+            }
+            else{
+                shares -= sold_shares;
+                return shares;
+            }
         }
 };
 
@@ -172,5 +197,6 @@ class Trading{
             return balance;
         }
 };
+
 
 #endif
