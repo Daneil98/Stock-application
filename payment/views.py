@@ -165,12 +165,12 @@ def stock_buy(request):
                 WalletTransaction_instance = cWalletTransaction
                 Wallet_instance = Wallet.objects.filter(user=name).last()
                 Wallet_instance.user = name
+                Wallet_instance.stock_eq = WalletTransaction_instance.buy_stock_eq_update(sum_price)
                 Wallet_instance.balance = WalletTransaction_instance.buy_balance_update(sum_price)      
-                Wallet_instance.stock_eq = WalletTransaction_instance.buy_stock_eq_update(sum_price)    
+
                 
-                
-                Buy.objects.create(user = name, name = stock_name, bought = True, stock_purchase_price = amount2, total_purchase_amount = sum_price, 
-                                   shares = shares_bought)            
+                Buy.objects.create(user = name, name = stock_name, bought = True, stock_purchase_price = amount2, 
+                                   total_purchase_amount = sum_price, shares = shares_bought)            
                 
                 StockWallet_instance.save()
                 Wallet_instance.save()
@@ -207,7 +207,7 @@ def stock_sell(request):
     amount3 = wallet_eq_balance = float(balance.stock_eq)         
     
     
-    #STOCK DATA FROM THE BUY MODEL DB
+    #STOCK DATA FROM THE STOCK WALLET MODEL DB
     StockWallet_instance = Stock_Wallet.objects.filter(user=user_name, name=stock_name).last()
 
     if StockWallet_instance is None:
