@@ -26,6 +26,18 @@ Install dependencies
   pip install -r Requirements.txt
 ```
 
+Prepare migrations
+
+```bash
+  python manage.py makemigrations
+```
+
+Make migrations
+
+```bash
+  python manage.py migrate
+```
+
 Start the server
 
 ```bash
