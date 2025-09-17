@@ -3,6 +3,9 @@ STOCK TRADING WEB-APP
 
 A scalable stock trading platform catering to registered users that provides comprehensive information about publicly listed stocks in the US, allows users to make deposits, purchase, sell and trade stocks with leverage seamlessly and securely through the integration of an authenticator for in-app transactions and third-party APIs, namely Tiingo for market data and Braintree for secure payment(deposit) processing. API Endpoints were also created to allow for CRUD operations.
 
+This webapp is live at https://stock-application.onrender.com/
+
+
 ## Run Locally
 
 Clone the project
