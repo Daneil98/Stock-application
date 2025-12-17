@@ -5,6 +5,7 @@ A scalable stock trading platform catering to registered users that provides com
 
 This webapp is live at https://stock-application.onrender.com/
 
+Screenshots of the project features can be at https://github.com/Daneil98/Stock-application/tree/master/Stockify%20screenshots
 
 ## Run Locally
 
