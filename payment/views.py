@@ -13,7 +13,7 @@ import pyotp
 from django.http import JsonResponse
 from django.db import transaction as db_transaction
 from decimal import Decimal
-import trading_cpp
+
 
 
 # Create your views here.
@@ -99,6 +99,10 @@ def payment_canceled(request):
 def stock_buy(request):
     form = BuyForm(request.POST)
 #    sign = True                                     # Helps determine what kind of operation is ongoing
+    try:     
+        import trading_cpp 
+    except ImportError:     
+        trading_cpp = None
     
     #GETS THE USER'S DATA
     user1 = request.user
@@ -189,6 +193,10 @@ def stock_buy(request):
 def stock_sell(request):
     form = SellForm(request.POST)
     
+    try:     
+        import trading_cpp 
+    except ImportError:     
+        trading_cpp = None
     #GETS THE USER'S DATA
     user = request.user
     profile = get_object_or_404(Profile, user=user)
@@ -267,7 +275,10 @@ def stock_sell(request):
 def long_position(request):
     form = LongForm(request.POST)
 #    sign = True
-    
+    try:     
+        import trading_cpp 
+    except ImportError:     
+        trading_cpp = None
     #GETS THE USER'S DATA
     user = request.user
     profile = get_object_or_404(Profile, user=user)
@@ -320,7 +331,10 @@ def long_position(request):
 def short_position(request):
     form = ShortForm(request.POST)
 #    sign = False
-    
+    try:     
+        import trading_cpp 
+    except ImportError:     
+        trading_cpp = None
     #GETS THE USER'S DATA
     user = request.user
     profile = get_object_or_404(Profile, user=user)
