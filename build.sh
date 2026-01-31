@@ -12,9 +12,8 @@ ls -la
 pip install . -v
 
 #  Install Python deps
-pip install -r requirements.txt
+pip install -r requirements.txt && python manage.py collectstatic --no-input
 
 # Django commands (safe now)
-python manage.py collectstatic --no-input
 python manage.py makemigrations
 python manage.py migrate
