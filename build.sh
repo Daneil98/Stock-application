@@ -1,7 +1,12 @@
+
+
 set -o errexit
 
 pip install --upgrade pip setuptools wheel
 pip install pybind11
+
+pwd
+ls -la
 
 # Install native extension FIRST
 pip install .
