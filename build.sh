@@ -1,10 +1,8 @@
 set -o errexit
 
 pip install pybind11
-pip install -r Requirement.txt
+pip install -r Requirement.txt && python manage.py collectstatic --no-input
 pip install .
 
-
-python manage.py collectstatic --no-input
 python manage.py makemigrations
 python manage.py migrate
