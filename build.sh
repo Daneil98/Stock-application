@@ -9,7 +9,7 @@ pwd
 ls -la
 
 # Install native extension FIRST
-pip install .
+pip install . -v
 
 #  Install Python deps
 pip install -r requirements.txt
