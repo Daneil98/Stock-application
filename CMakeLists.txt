@@ -11,11 +11,10 @@ include(FetchContent)
 FetchContent_Declare(
     pybind11
     GIT_REPOSITORY https://github.com/pybind/pybind11.git
-    GIT_TAG v2.12.0   # pick a stable release
+    GIT_TAG v2.12.0   
 )
 FetchContent_MakeAvailable(pybind11)
 
 pybind11_add_module(trading_cpp bindings.cpp)
 
-# 👇 Add this so the compiler can find headers in your source dir
 target_include_directories(trading_cpp PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
