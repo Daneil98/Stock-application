@@ -1,0 +1,7 @@
+[build]
+# Install Python 3 development headers for CMake
+apt = ["python3-dev"]
+
+# Keep the build steps defined by Railpack's C++ detection
+# or explicitly override if needed
+
